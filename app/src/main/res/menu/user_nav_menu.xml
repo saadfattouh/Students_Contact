@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<group android:checkableBehavior="single">
+
+    <item
+        android:id="@+id/community"
+        android:icon="@drawable/ic_community"
+        android:title="@string/community" />
+
+    <item
+        android:id="@+id/professors"
+        android:icon="@drawable/ic_teacher"
+        android:title="@string/ask_professors" />
+
+    <item android:title="@string/learning_resources">
+        <menu>
+            <item
+                android:id="@+id/honor_students"
+                android:icon="@drawable/ic_honor_student"
+                android:title="@string/ask_honor_students" />
+            <item
+                android:id="@+id/books"
+                android:icon="@drawable/ic_book_library"
+                android:title="@string/book_library" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/student_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile" />
+
+</group>
+
+</menu>

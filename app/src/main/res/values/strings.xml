@@ -1,3 +1,56 @@
 <resources>
-    <string name="app_name">Shaqra Students Contact</string>
+    <string name="app_name">Shaqraa Students Contact</string>
+
+    <string name="hint_user_name">User name</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_link_to_register">Not a member? Sign up now.</string>
+    <string name="email_and_password_required">email and password must not be empty!</string>
+    <string name="hint_name">full name</string>
+    <string name="register">Register</string>
+    <string name="btn_link_to_login">Already registered! Login Me.</string>
+    <string name="hint_email">Email</string>
+    <string name="account">Account</string>
+
+
+    <!--    user type related...-->
+    <string name="user_type">user type</string>
+    <string name="student">Student</string>
+    <string name="professor">Professor</string>
+
+    <string name="email_missing_message">please enter your email address!</string>
+    <string name="password_missing_message">please enter your password!</string>
+    <string name="name_missing_message">please enter your full name !</string>
+    <string name="type_missing_message">please select your account type!</string>
+
+
+    <!--    status related-->
+    <string name="status_new">NEW</string>
+    <string name="status_rejected">REJECTED</string>
+    <string name="status_processing">PROCESSING</string>
+    <string name="status_completed">COMPLETED</string>
+
+    <string name="show_message">Show message</string>
+    <string name="ok">Ok</string>
+    <string name="message">Message : </string>
+
+    <string name="start_at">start at</string>
+    <string name="end_at">end at</string>
+    <string name="choose_department">Select department</string>
+    <string name="professor_email_suffex">cs.su@gmail.com</string>
+    <string name="please_provide_a_professor_email">please provide a valid professor email</string>
+    <string name="student_email_suffex">std.su.edu.sa</string>
+    <string name="please_provide_a_valid_student_email">please provide a valid student email</string>
+    <string name="community">Community</string>
+    <string name="ask_professors">Ask professors</string>
+    <string name="learning_resources">Learning Resources</string>
+    <string name="ask_honor_students">chat with honor student</string>
+    <string name="book_library">Book library</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="students_questions">Students questions</string>
+    <string name="set_free_time_schedule">Set free time schedule</string>
+    <string name="profile">Profile</string>
+
+
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_professor"
+    app:startDestination="@id/answerQuestionsFragment">
+
+    <fragment
+        android:id="@+id/answerQuestionsFragment"
+        android:name="com.example.shaqrastudentscontact.fragments.professor.AnswerQuestionsFragment"
+        android:label="fragment_professor_answer_questions"
+        tools:layout="@layout/fragment_professor_answer_questions" />
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.example.shaqrastudentscontact.fragments.professor.Profile"
+        android:label="fragment_professor_profile"
+        tools:layout="@layout/fragment_professor_profile" />
+    <fragment
+        android:id="@+id/scheduleFreeTime"
+        android:name="com.example.shaqrastudentscontact.fragments.professor.ScheduleFreeTime"
+        android:label="fragment_professor_schedule_free_time"
+        tools:layout="@layout/fragment_professor_schedule_free_time" />
+</navigation>
