@@ -21,12 +21,10 @@ import org.json.JSONObject;
 
 public class UpdateProfile extends AppCompatActivity {
 
-    EditText mNameET;
-    EditText mUserNameET;
-    EditText mPhoneET;
-    EditText mAddressET;
+    EditText mPassword;
+    EditText mConfirmPassword;
 
-    Button mSubmitBtn;
+    Button mUpdateBtn;
 
     private ProgressDialog pDialog;
 
@@ -43,9 +41,9 @@ public class UpdateProfile extends AppCompatActivity {
         pDialog.setCancelable(false);
 
 
-        mSubmitBtn.setOnClickListener(v -> {
+        mUpdateBtn.setOnClickListener(v -> {
             if(validateUserInput()){
-                mSubmitBtn.setEnabled(false);
+                mUpdateBtn.setEnabled(false);
                 register();
             }
         });
@@ -55,52 +53,29 @@ public class UpdateProfile extends AppCompatActivity {
 
 
     private void bindViews() {
-        mNameET = findViewById(R.id.name);
-        mUserNameET = findViewById(R.id.user_name);
-        mPhoneET = findViewById(R.id.phone);
-        mAddressET = findViewById(R.id.address);
-        mSubmitBtn = findViewById(R.id.btnRegister);
+        mPassword = findViewById(R.id.password);
+        mConfirmPassword = findViewById(R.id.confirm_password);
+        mUpdateBtn = findViewById(R.id.btn_update);
     }
 
     private boolean validateUserInput() {
 
         //first getting the values
-        final String name = mNameET.getText().toString();
-        final String phone = mPhoneET.getText().toString();
-        final String userName = mUserNameET.getText().toString();
-        final String address = mAddressET.getText().toString();
+        final String pass = mPassword.getText().toString();
+        final String confirmPass = mConfirmPassword.getText().toString();
+
 
         //checking if username is empty
-        if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, getResources().getString(R.string.name_missing_message), Toast.LENGTH_SHORT).show();
-            mSubmitBtn.setEnabled(true);
+        if (TextUtils.isEmpty(pass) || TextUtils.isEmpty(confirmPass) ) {
+            Toast.makeText(this, getResources().getString(R.string.field_missing_message), Toast.LENGTH_SHORT).show();
+            mUpdateBtn.setEnabled(true);
+            return false;
+
+        }else if (!pass.equals(confirmPass)){
+            Toast.makeText(this, getResources().getString(R.string.password_not_same), Toast.LENGTH_SHORT).show();
+            mUpdateBtn.setEnabled(true);
             return false;
         }
-
-        //checking if userName is empty
-        if (TextUtils.isEmpty(userName)) {
-            Toast.makeText(this, getResources().getString(R.string.user_name_missing_message), Toast.LENGTH_SHORT).show();
-            mSubmitBtn.setEnabled(true);
-            return false;
-        }
-
-
-        //checking if phone is empty
-        if (TextUtils.isEmpty(phone)) {
-            Toast.makeText(this, getResources().getString(R.string.email_missing_message), Toast.LENGTH_SHORT).show();
-            mSubmitBtn.setEnabled(true);
-            return false;
-        }
-
-
-
-        //checking if address is empty
-        if (TextUtils.isEmpty(address)) {
-            Toast.makeText(this, getResources().getString(R.string.address_missing_message), Toast.LENGTH_SHORT).show();
-            mSubmitBtn.setEnabled(true);
-            return false;
-        }
-
 
         return true;
     }
@@ -110,19 +85,13 @@ public class UpdateProfile extends AppCompatActivity {
         pDialog.show();
 
         //first getting the values
-        final String name = mNameET.getText().toString();
-        final String phone = mPhoneET.getText().toString();
-        final String userName = mUserNameET.getText().toString();
-        final String address = mAddressET.getText().toString();
-
+        final String pass = mPassword.getText().toString();
 
         String url = Urls.BASE_URL + Urls.REGISTER_URL;
 
         AndroidNetworking.post(url)
-                .addBodyParameter("name", name)
-                .addBodyParameter("phone", phone)
-                .addBodyParameter("user_name", userName)
-                .addBodyParameter("address", address)
+                .addBodyParameter("password", pass)
+
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -170,7 +139,7 @@ public class UpdateProfile extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         pDialog.dismiss();
-                        mSubmitBtn.setEnabled(true);
+                        mUpdateBtn.setEnabled(true);
                         Toast.makeText(UpdateProfile.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

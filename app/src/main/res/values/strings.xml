@@ -51,6 +51,15 @@
     <string name="students_questions">Students questions</string>
     <string name="set_free_time_schedule">Set free time schedule</string>
     <string name="profile">Profile</string>
+    <string name="confirm_pass">Confirm password</string>
+    <string name="update">Update</string>
+    <string name="field_missing_message">Please fill all fields</string>
+    <string name="password_not_same">Please make sure that confirm password is the same as password</string>
+    <string name="logout">Logout</string>
+    <string name="place_holder">pp</string>
+    <string name="books_list">Books List</string>
+    <string name="write_question">Write a question</string>
+    <string name="write_reply">Write a reply</string>
 
 
 </resources>

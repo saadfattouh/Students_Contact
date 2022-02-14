@@ -2,26 +2,25 @@ package com.example.shaqrastudentscontact.activities.student;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.os.Bundle;
+
+import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.utils.SharedPrefManager;
+import com.google.android.material.navigation.NavigationView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.shaqrastudentscontact.R;
-import com.example.shaqrastudentscontact.utils.SharedPrefManager;
-import com.google.android.material.navigation.NavigationView;
 
-public class StudentMain extends AppCompatActivity implements DrawerLayout.DrawerListener, NavigationView.OnNavigationItemSelectedListener{
-
-    SharedPrefManager prefManager;
-    int deptId, studentId, studentType;
+public class StudentMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
 
     public Toolbar toolbar;
 
@@ -32,7 +31,7 @@ public class StudentMain extends AppCompatActivity implements DrawerLayout.Drawe
     public NavigationView navigationView;
 
 
-    int destination = R.id.answerQuestionsFragment;
+    int destination = R.id.communityFragment;
 
     AppBarConfiguration mAppBarConfiguration;
 
@@ -41,18 +40,12 @@ public class StudentMain extends AppCompatActivity implements DrawerLayout.Drawe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
 
-        prefManager = SharedPrefManager.getInstance(this);
-        deptId = prefManager.getSelectedDept();
-        studentId = prefManager.getUserId();
-        studentType = prefManager.getStudentType();
-
         setupNavigation();
-
-
     }
 
     private void setupNavigation() {
         toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -63,7 +56,7 @@ public class StudentMain extends AppCompatActivity implements DrawerLayout.Drawe
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.answerQuestionsFragment, R.id.scheduleFreeTime, R.id.profile).setOpenableLayout(drawerLayout).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder( R.id.communityFragment,R.id.books_list,R.id.professors,R.id.honorStudents, R.id.chatListFragment).setOpenableLayout(drawerLayout).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
@@ -74,6 +67,7 @@ public class StudentMain extends AppCompatActivity implements DrawerLayout.Drawe
         drawerLayout.addDrawerListener(this);
 
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -94,30 +88,36 @@ public class StudentMain extends AppCompatActivity implements DrawerLayout.Drawe
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-        menuItem.setChecked(true);
+//        menuItem.setChecked(true);
 
         int id = menuItem.getItemId();
+        navigationView.getMenu().findItem(id).setChecked(true);
 
         switch (id) {
 
-            case R.id.community:
+            case R.id.menu_community:
                 destination = R.id.communityFragment;
                 break;
+            case R.id.menu_books:
+                destination = R.id.books_list;
 
-            case R.id.professors:
-                destination = R.id.professors;
                 break;
+            case R.id.menu_professors:
+                destination = R.id.chatListFragment;
 
-            case R.id.honor_students:
+                break;
+            case R.id.menu_honor_students:
                 destination = R.id.honorStudents;
+
                 break;
 
-            case R.id.books:
-                destination = R.id.book_library;
-                break;
-
-            case R.id.student_profile:
+            case R.id.menu_student_profile:
                 destination = R.id.profile;
+
+                break;
+            case R.id.menu_logout:
+                SharedPrefManager sharedPrefManager = new SharedPrefManager(this);
+                sharedPrefManager.logout();
                 break;
         }
 

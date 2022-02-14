@@ -64,39 +64,41 @@ public class Login extends AppCompatActivity {
                 //validation
                 String email = mEmailET.getText().toString().trim();
                 String password = mPassET.getText().toString().trim();
+                loginStudent(email, password);
+
                 // Check for empty data in the form
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    if(selectedUserType == -1){
-                        Toast.makeText(Login.this, getResources().getString(R.string.type_missing_message), Toast.LENGTH_SHORT).show();
-                        mLoginBtn.setEnabled(true);
-                        return;
-                    }else {
-                        if(selectedUserType == Constants.USER_TYPE_PROFESSOR){
-                            if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
-                                Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
-                                mLoginBtn.setEnabled(true);
-                                return ;
-                            }else {
-                                // login professor
-                                loginProfessor(email, password);
-                            }
-                        }else if(selectedUserType == Constants.USER_TYPE_MAIN){
-                            if(!email.contains(getResources().getString(R.string.student_email_suffex))){
-                                Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
-                                mLoginBtn.setEnabled(true);
-                                return;
-                            }else {
-                                // login student
-                                loginStudent(email, password);
-                            }
-                        }
-                    }
-                } else {
-                    // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            getResources().getString(R.string.email_and_password_required), Toast.LENGTH_LONG)
-                            .show();
-                }
+//                if (!email.isEmpty() && !password.isEmpty()) {
+//                    if(selectedUserType == -1){
+//                        Toast.makeText(Login.this, getResources().getString(R.string.type_missing_message), Toast.LENGTH_SHORT).show();
+//                        mLoginBtn.setEnabled(true);
+//                        return;
+//                    }else {
+//                        if(selectedUserType == Constants.USER_TYPE_PROFESSOR){
+//                            if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
+//                                Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
+//                                mLoginBtn.setEnabled(true);
+//                                return ;
+//                            }else {
+//                                // login professor
+//                                loginProfessor(email, password);
+//                            }
+//                        }else if(selectedUserType == Constants.USER_TYPE_MAIN){
+//                            if(!email.contains(getResources().getString(R.string.student_email_suffex))){
+//                                Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
+//                                mLoginBtn.setEnabled(true);
+//                                return;
+//                            }else {
+//                                // login student
+//                                loginStudent(email, password);
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    // Prompt user to enter credentials
+//                    Toast.makeText(getApplicationContext(),
+//                            getResources().getString(R.string.email_and_password_required), Toast.LENGTH_LONG)
+//                            .show();
+//                }
             }
         });
 

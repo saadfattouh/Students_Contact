@@ -6,27 +6,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.student.ChooseDepartment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:title="@string/choose_department"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
-
+        >
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/choose_department"
+            />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="department"/>
+            tools:listitem="@layout/department_item"/>
 
 
 

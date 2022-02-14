@@ -30,7 +30,7 @@ public class SharedPrefManager {
     private static SharedPrefManager mInstance;
     private static Context context;
 
-    private SharedPrefManager(Context context) {
+    public SharedPrefManager(Context context) {
         SharedPrefManager.context = context;
     }
     public static synchronized SharedPrefManager getInstance(Context context) {

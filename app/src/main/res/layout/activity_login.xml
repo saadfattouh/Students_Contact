@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bg_login"
+    android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
@@ -26,7 +26,7 @@
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
-            android:background="@color/white"
+            android:background="@color/colorAccent"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint" />
 
@@ -35,7 +35,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/white"
+            android:background="@color/colorAccent"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:padding="10dp"
@@ -49,23 +49,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:padding="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layoutDirection="ltr">
 
             <RadioButton
                 android:id="@+id/student"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/white"
-                android:buttonTint="@color/white"
+                android:textColor="@color/primaryTextColorDark"
+                android:buttonTint="@color/primaryTextColorDark"
                 android:text="@string/student"/>
             <RadioButton
                 android:id="@+id/professor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/white"
-                android:buttonTint="@color/white"
+                android:textColor="@color/primaryTextColorDark"
+                android:buttonTint="@color/primaryTextColorDark"
                 android:text="@string/professor"/>
 
         </RadioGroup>
@@ -78,8 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:text="@string/btn_login"
-            android:background="@color/btn_login_bg"
-            android:textColor="@color/btn_login" />
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white" />
 
         <!-- Link to Login Screen -->
 

@@ -12,10 +12,10 @@ import com.example.shaqrastudentscontact.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link book_library#newInstance} factory method to
+ * Use the {@link BooksListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class book_library extends Fragment {
+public class BooksListFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class book_library extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public book_library() {
+    public BooksListFragment() {
         // Required empty public constructor
     }
 
@@ -39,8 +39,8 @@ public class book_library extends Fragment {
      * @return A new instance of fragment book_library.
      */
     // TODO: Rename and change types and number of parameters
-    public static book_library newInstance(String param1, String param2) {
-        book_library fragment = new book_library();
+    public static BooksListFragment newInstance(String param1, String param2) {
+        BooksListFragment fragment = new BooksListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class book_library extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_students_book_library, container, false);
+        return inflater.inflate(R.layout.fragment_students_books_list, container, false);
     }
 }
