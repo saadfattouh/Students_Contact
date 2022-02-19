@@ -1,8 +1,7 @@
-package com.example.shaqrastudentscontact.adapters;
+package com.example.shaqrastudentscontact.student.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.shaqrastudentscontact.activities.student.StudentMain;
+import com.example.shaqrastudentscontact.student.StudentMain;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.Department;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
@@ -35,7 +34,7 @@ public class DepartmentsAdapter extends RecyclerView.Adapter<DepartmentsAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.department_item, parent, false);
+        View listItem = layoutInflater.inflate(R.layout.item_department, parent, false);
         ViewHolder viewHolder = new ViewHolder(listItem);
 
         return viewHolder;

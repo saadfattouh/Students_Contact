@@ -18,7 +18,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
-import com.example.shaqrastudentscontact.api.Urls;
+import com.example.shaqrastudentscontact.utils.Urls;
 import com.example.shaqrastudentscontact.chat.models.Chat;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 

@@ -4,14 +4,14 @@ public class Professor {
 
     private int id;
     private String name;
-    private int dept_id;
+    private String deptName;
     private String specialization;
     private String email;
 
-    public Professor(int id, String name, int dept_id, String specialization, String email) {
+    public Professor(int id, String name, String deptName, String specialization, String email) {
         this.id = id;
         this.name = name;
-        this.dept_id = dept_id;
+        this.deptName = deptName;
         this.specialization = specialization;
         this.email = email;
     }
@@ -32,12 +32,8 @@ public class Professor {
         this.name = name;
     }
 
-    public int getDept_id() {
-        return dept_id;
-    }
-
-    public void setDept_id(int dept_id) {
-        this.dept_id = dept_id;
+    public String getDeptName() {
+        return deptName;
     }
 
     public String getSpecialization() {

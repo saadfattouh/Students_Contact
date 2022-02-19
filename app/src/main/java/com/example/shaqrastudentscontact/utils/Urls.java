@@ -1,4 +1,4 @@
-package com.example.shaqrastudentscontact.api;
+package com.example.shaqrastudentscontact.utils;
 
 public class Urls {
 

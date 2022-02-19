@@ -10,76 +10,67 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".chat.ChattingFragment"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+
     >
 
     <!--    messages container-->
     <FrameLayout
-        android:id="@+id/questions_container"
+        android:id="@+id/chat_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@id/common_questions_btn"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/edit_text_layout"
+
+        >
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/messages_list"
+                android:id="@+id/replies_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="vertical"
-                tools:listitem="@layout/item_question"/>
+                tools:listitem="@layout/item_reply"/>
         </androidx.core.widget.NestedScrollView>
     </FrameLayout>
-    <Button
-        android:id="@+id/common_questions_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/common_questions"
-        android:layout_below="@id/edit_text_layout"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
 
-        />
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_text_layout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/post_question_btn"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:hint="@string/write_question"
+        android:layout_toStartOf="@id/reply_btn"
+        android:hint="@string/post_reply"
         app:hintAnimationEnabled="false"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:boxStrokeColor="@android:color/darker_gray"
         app:hintTextColor="@android:color/darker_gray"
-        app:placeholderTextColor="@android:color/darker_gray">
+        app:placeholderTextColor="@android:color/darker_gray"
+        android:layout_margin = "4dp"
+
+        >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/post_question_et"
+            android:id="@+id/reply_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:textColorHint="@color/input_register_hint"
             android:lines="1"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/post_question_btn"
-        android:layout_width="40dp"
-        android:layout_height="36dp"
+        android:id="@+id/reply_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignTop="@id/edit_text_layout"
         android:layout_alignBottom="@id/edit_text_layout"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:scaleType="fitCenter"
+        android:tint="@color/black"
+        android:layout_marginEnd="8dp"
         android:src="@drawable/ic_send_24" />
 
 </RelativeLayout>

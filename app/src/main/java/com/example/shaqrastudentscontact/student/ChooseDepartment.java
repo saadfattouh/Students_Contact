@@ -1,4 +1,4 @@
-package com.example.shaqrastudentscontact.activities.student;
+package com.example.shaqrastudentscontact.student;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.example.shaqrastudentscontact.R;
-import com.example.shaqrastudentscontact.adapters.DepartmentsAdapter;
+import com.example.shaqrastudentscontact.student.adapters.DepartmentsAdapter;
 import com.example.shaqrastudentscontact.models.Department;
 
 import java.util.ArrayList;

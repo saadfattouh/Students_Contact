@@ -1,4 +1,4 @@
-package com.example.shaqrastudentscontact;
+package com.example.shaqrastudentscontact.utils;
 
 public class Constants {
 

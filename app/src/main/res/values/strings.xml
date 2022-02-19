@@ -59,7 +59,20 @@
     <string name="place_holder">pp</string>
     <string name="books_list">Books List</string>
     <string name="write_question">Write a question</string>
-    <string name="write_reply">Write a reply</string>
+    <string name="add_reply">Add a reply</string>
+    <string name="post_reply">Post a reply</string>
+    <string name="student_name">Student name</string>
+    <string name="reply">Reply</string>
+    <string name="date">date</string>
+    <string name="question">Question</string>
+    <string name="you_cant_post_empty_question">You cant post an empty question</string>
+    <string name="common_questions">View common questions</string>
+    <string name="you_cant_post_empty_reply">You cant post an empty reply</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="professor_name">Professor name</string>
+    <string name="department">Department</string>
+    <string name="specialization">Specialization</string>
 
 
 </resources>

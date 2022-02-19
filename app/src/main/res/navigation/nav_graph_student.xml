@@ -3,32 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_nav_graph"
-    app:startDestination="@id/communityFragment">
+    app:startDestination="@id/menu_community">
 
     <fragment
-        android:id="@+id/communityFragment"
-        android:name="com.example.shaqrastudentscontact.fragments.student.CommunityFragment"
-        android:label="Community"
-        tools:layout="@layout/fragment_student_community" />
+        android:id="@+id/menu_community"
+        android:name="com.example.shaqrastudentscontact.student.fragments.CommunityFragment"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_student_community" >
+        <action
+            android:id="@+id/action_communityFragment_to_repliesFragment"
+            app:destination="@id/replies"
+            app:popUpTo="@id/menu_community" />
+    </fragment>
     <fragment
-        android:id="@+id/professors"
-        android:name="com.example.shaqrastudentscontact.fragments.student.Professors"
+        android:id="@+id/replies"
+        android:name="com.example.shaqrastudentscontact.student.fragments.RepliesFragment"
+        android:label="Questions replies"
+        tools:layout="@layout/fragment_replies" />
+    <fragment
+        android:id="@+id/menu_professors"
+        android:name="com.example.shaqrastudentscontact.student.fragments.ProfessorsFragment"
         android:label="Professors"
-        tools:layout="@layout/fragment_student_professors" />
+        tools:layout="@layout/fragment_student_professors">
+        <action
+            android:id="@+id/action_profFragment_to_profDetailsFragment"
+            app:destination="@id/profDetailsFragment"
+            app:popUpTo="@id/menu_professors" />
+    </fragment>
     <fragment
-        android:id="@+id/honorStudents"
-        android:name="com.example.shaqrastudentscontact.fragments.student.HonorStudents"
+        android:id="@+id/profDetailsFragment"
+        android:name="com.example.shaqrastudentscontact.student.fragments.ProfessorDetailsFragment"
+        android:label="Professor Details"
+        tools:layout="@layout/fragment_professor_details" />
+    <fragment
+        android:id="@+id/menu_honor_students"
+        android:name="com.example.shaqrastudentscontact.student.fragments.HonorStudents"
         android:label="Honor Students"
         tools:layout="@layout/fragment_student_honor_students" />
     <fragment
-        android:id="@+id/books_list"
-        android:name="com.example.shaqrastudentscontact.fragments.student.BooksListFragment"
+        android:id="@+id/menu_books"
+        android:name="com.example.shaqrastudentscontact.student.fragments.BooksListFragment"
         android:label="Books List"
         tools:layout="@layout/fragment_students_books_list" />
 
     <fragment
-        android:id="@+id/profile"
-        android:name="com.example.shaqrastudentscontact.fragments.student.BooksListFragment"
+        android:id="@+id/menu_student_profile"
+        android:name="com.example.shaqrastudentscontact.student.fragments.StudentProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_student_profile" />
     <fragment

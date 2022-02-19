@@ -14,14 +14,12 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.example.shaqrastudentscontact.Constants;
+import com.example.shaqrastudentscontact.utils.Constants;
 import com.example.shaqrastudentscontact.R;
-import com.example.shaqrastudentscontact.api.Urls;
+import com.example.shaqrastudentscontact.utils.Urls;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static com.example.shaqrastudentscontact.R.string.please_provide_a_professor_email;
 
 public class Register extends AppCompatActivity {
 
