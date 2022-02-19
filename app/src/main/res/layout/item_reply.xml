@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.cardview.widget.CardView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="12dp"
-    android:layout_margin="6dp"
-    app:cardCornerRadius="12dp"
-    android:elevation="3dp">
+    android:padding="8dp"
+    android:background="@drawable/bg_post"
+    android:layout_margin="6dp">
+
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp">
@@ -19,11 +17,13 @@
             android:id="@+id/person_profile_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_student"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_student"
+            app:civ_border_color="@color/blue_light"
+            app:civ_border_width="2dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,20 +37,9 @@
                 android:id="@+id/student_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:text="@string/student_name"/>
-
-            <TextView
-                android:id="@+id/reply"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/input_register_bg"
-                android:text="@string/reply"
-                android:lines="2"/>
 
             <TextView
                 android:id="@+id/date"
@@ -60,12 +49,23 @@
                 android:textSize="18sp"
                 android:textColor="@color/input_register_hint"
                 android:text="@string/date"
-                android:alpha="0.6"
-                android:layout_marginBottom="4dp"/>
+                android:alpha="0.5"/>
+
+            <TextView
+                android:id="@+id/reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:alpha="0.8"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/input_register_bg"
+                android:text="@string/reply"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"/>
         </LinearLayout>
 
 
 
     </RelativeLayout>
 
-</androidx.cardview.widget.CardView>
+</FrameLayout>

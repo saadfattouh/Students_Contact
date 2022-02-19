@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    android:gravity="center_vertical"
+    tools:context=".student.fragments.AskProfessorFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_post"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="16dp"
+        android:paddingHorizontal="16dp">
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="@string/title"
+            android:backgroundTint="@color/white"
+            android:textSize="18sp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_post"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="16dp">
+        <EditText
+            android:id="@+id/details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:backgroundTint="@color/white"
+            android:lines="8"
+            android:hint="@string/details"
+            android:textSize="18sp"
+            android:gravity="top"/>
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/send_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:background="@drawable/bg_pos_blue"
+        android:layout_marginTop="8dp"
+        android:drawableEnd="@drawable/ic_forward"
+        android:paddingHorizontal="16dp"
+        android:drawableTint="@color/white"
+        android:textColor="@color/white"
+        android:text="@string/send"
+        android:textAllCaps="false"/>
+
+
+
+
+</LinearLayout>

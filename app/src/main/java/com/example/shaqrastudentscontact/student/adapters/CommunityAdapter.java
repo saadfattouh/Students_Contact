@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -71,6 +72,17 @@ public class CommunityAdapter  extends RecyclerView.Adapter<CommunityAdapter.Vie
             }
         });
 
+        holder.replies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: go to replies
+                navController = Navigation.findNavController(holder.itemView);
+                Bundle bundle = new Bundle();
+                bundle.putString("question_id", String.valueOf(question.getId()));
+                navController.navigate(R.id.action_communityFragment_to_repliesFragment,bundle);
+            }
+        });
+
 
     }
 
@@ -86,43 +98,55 @@ public class CommunityAdapter  extends RecyclerView.Adapter<CommunityAdapter.Vie
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 FilterResults filterResults = new FilterResults();
-                        List<Question> resultData = new ArrayList<Question>();
-                        for(Question question: filteredList){
-                            if(question.isCommon()){
-                                    resultData.add(question);
-                            }
+
+                if (charSequence == null | charSequence.length() == 0) {
+                    filterResults.count = filteredList.size();
+                    filterResults.values = filteredList;
+
+                } else {
+                    String search = charSequence.toString().toLowerCase();
+
+                    List<Question> resultData = new ArrayList<>();
+
+                    if (search.equals("common")) {
+                        for (Question question : list) {
+                            if (question.isCommon())
+                                resultData.add(question);
                         }
 
 
-                    filterResults.count = resultData.size();
-                    filterResults.values = resultData;
+                        filterResults.count = resultData.size();
+                        filterResults.values = resultData;
 
-
-
+                    }
+                }
                 return filterResults;
             }
 
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                list = (List<Question>) filterResults.values;
-                notifyDataSetChanged();
-            }
+                @Override
+                protected void publishResults (CharSequence charSequence, FilterResults
+                filterResults){
+                    list = (List<Question>) filterResults.values;
+                    notifyDataSetChanged();
+                }
         };
+
         return filter;
+
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView studentName, question, date;
-        public EditText addReply;
+        public TextView studentName, question, date, replies, addReply;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.studentName = itemView.findViewById(R.id.student_name);
+            this.studentName = itemView.findViewById(R.id.name);
             this.question = itemView.findViewById(R.id.question);
             this.date = itemView.findViewById(R.id.date);
-            this.addReply = itemView.findViewById(R.id.add_reply);
+            this.addReply = itemView.findViewById(R.id.reply);
+            this.replies = itemView.findViewById(R.id.replies);
 
         }
     }

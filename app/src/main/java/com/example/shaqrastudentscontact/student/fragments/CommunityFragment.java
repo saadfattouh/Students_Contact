@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.shaqrastudentscontact.R;
@@ -30,6 +32,8 @@ public class CommunityFragment extends Fragment {
     ImageView postQuestionBtn;
     Button viewCommonQuestions;
     Context ctx;
+
+    RadioGroup contentTypeSelector;
 
     RecyclerView mList;
     CommunityAdapter mAdapter;
@@ -61,11 +65,11 @@ public class CommunityFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        questionET = view.findViewById(R.id.post_question_et);
-        postQuestionBtn = view.findViewById(R.id.post_question_btn);
-        viewCommonQuestions = view.findViewById(R.id.common_questions_btn);
 
-        mList = view.findViewById(R.id.messages_list);
+        questionET = view.findViewById(R.id.question_et);
+        postQuestionBtn = view.findViewById(R.id.question_btn);
+        mList = view.findViewById(R.id.rv);
+        contentTypeSelector = view.findViewById(R.id.questions_type_selector);
 
 
         ArrayList<Question> list = new ArrayList<Question>(){{
@@ -91,13 +95,26 @@ public class CommunityFragment extends Fragment {
                 }
             }
         });
-        viewCommonQuestions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapter.getFilter().filter("");
 
+        contentTypeSelector.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton allBtn = view.findViewById(R.id.all);
+            RadioButton commonBtn = view.findViewById(R.id.common);
+            RadioButton unselectedBtn;
+
+            switch (checkedId){
+                case R.id.all:
+                    allBtn.setTextColor(getResources().getColor(R.color.white));
+                    commonBtn.setTextColor(getResources().getColor(R.color.black));
+                    mAdapter.getFilter().filter("");
+                    break;
+                case R.id.common:
+                    commonBtn.setTextColor(getResources().getColor(R.color.white));
+                    allBtn.setTextColor(getResources().getColor(R.color.black));
+                    mAdapter.getFilter().filter("common");
+                    break;
             }
         });
+
     }
 
     private void postQuestion(String question) {

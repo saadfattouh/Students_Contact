@@ -57,7 +57,7 @@ public class ProfessorsAdapter extends RecyclerView.Adapter<ProfessorsAdapter.Vi
                 navController = Navigation.findNavController(holder.itemView);
                 Bundle bundle = new Bundle();
                 bundle.putString("prof_id", String.valueOf(prof.getId()));
-                navController.navigate(R.id.action_profFragment_to_profDetailsFragment,bundle);
+                navController.navigate(R.id.action_profFragment_to_profDetailsFragment, bundle);
             }
         });
 

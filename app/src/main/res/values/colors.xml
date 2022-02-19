@@ -24,4 +24,8 @@
     <color name="btn_global">#26ae90</color>
     <color name="btn_global_bg">#eceef1</color>
 
+    <color name="bg_main">#eff1f8</color>
+    <color name="blue_light">#467fd7</color>
+
+
 </resources>

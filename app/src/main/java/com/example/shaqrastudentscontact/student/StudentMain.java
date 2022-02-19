@@ -56,7 +56,7 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder( R.id.menu_community,R.id.menu_professors,R.id.menu_honor_students,R.id.menu_books, R.id.menu_student_profile, R.id.chatListFragment).setOpenableLayout(drawerLayout).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder( R.id.menu_community,R.id.menu_professors,R.id.menu_honor_students,R.id.menu_books, R.id.menu_student_profile).setOpenableLayout(drawerLayout).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 

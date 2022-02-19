@@ -59,20 +59,35 @@
     <string name="place_holder">pp</string>
     <string name="books_list">Books List</string>
     <string name="write_question">Write a question</string>
-    <string name="add_reply">Add a reply</string>
+    <string name="write_reply">Write a reply</string>
+    <string name="post_new_question">Post new question</string>
+    <string name="search">Search</string>
+    <string name="replies">replies</string>
+    <string name="add_reply">Add reply</string>
     <string name="post_reply">Post a reply</string>
     <string name="student_name">Student name</string>
     <string name="reply">Reply</string>
     <string name="date">date</string>
     <string name="question">Question</string>
     <string name="you_cant_post_empty_question">You cant post an empty question</string>
-    <string name="common_questions">View common questions</string>
+    <string name="common_questions">common questions</string>
     <string name="you_cant_post_empty_reply">You cant post an empty reply</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="professor_name">Professor name</string>
     <string name="department">Department</string>
     <string name="specialization">Specialization</string>
+    <string name="all">All questions</string>
+    <string name="free_time">Free time</string>
+    <string name="to"> -> </string>
+    <string name="ask_a_question">Ask Question</string>
+    <string name="title">Title</string>
+    <string name="details">Details</string>
+    <string name="send">Send</string>
+    <string name="missing_fields_message">All fields are required</string>
+    <string name="asked_questions">Asked questions</string>
+    <string name="answer">Answer</string>
+    <string name="no_answer_yet">No answer yet</string>
 
 
 </resources>
