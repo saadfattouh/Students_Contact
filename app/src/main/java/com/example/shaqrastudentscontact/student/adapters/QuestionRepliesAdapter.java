@@ -53,7 +53,7 @@ public class QuestionRepliesAdapter extends RecyclerView.Adapter<QuestionReplies
 
         holder.itemView.setOnClickListener(v -> {
             LayoutInflater factory = LayoutInflater.from(context);
-            final View view = factory.inflate(R.layout.question_reply_dialog, null);
+            final View view = factory.inflate(R.layout.dialog_question_reply, null);
             final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
             questionReplyDialog.setView(view);
             questionReplyDialog.setCanceledOnTouchOutside(true);

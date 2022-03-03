@@ -9,6 +9,7 @@ public class Question {
     private String date;
     private ArrayList<String> answers;
     private boolean common;
+    //receiverId for backend
 
     public Question(int id, String studentName, String question, String date, boolean common) {
         this.id = id;

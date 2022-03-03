@@ -64,14 +64,14 @@ public class ChatListFragment extends Fragment {
 
         chats = new ArrayList<Chat>()
         {{
-            add(new Chat("teacher1", "1"));
-            add(new Chat("teacher1", "1"));
-            add(new Chat("teacher1", "1"));
-            add(new Chat("teacher1", "1"));
-            add(new Chat("teacher1", "1"));
-            add(new Chat("teacher1", "1"));
-            add(new Chat("teacher1", "1"));
-            add(new Chat("teacher1", "1"));
+            add(new Chat("honor student", "1"));
+            add(new Chat("honor student", "1"));
+            add(new Chat("honor student", "1"));
+            add(new Chat("honor student", "1"));
+            add(new Chat("honor student", "1"));
+            add(new Chat("honor student", "1"));
+            add(new Chat("honor student", "1"));
+            add(new Chat("honor student", "1"));
 
         }};
 
@@ -87,7 +87,7 @@ public class ChatListFragment extends Fragment {
         pDialog.setMessage("Processing Please wait...");
         pDialog.show();
 
-        String url = Urls.GET_MESSAGES_LIST;
+        String url = Urls.GET_CHAT_LIST;
         url += "&user_id=" + SharedPrefManager.getInstance(getContext()).getUserId();
 
         chats = new ArrayList<>();

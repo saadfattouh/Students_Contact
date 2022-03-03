@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.student.adapters.DepartmentsAdapter;
 import com.example.shaqrastudentscontact.models.Department;
+import com.example.shaqrastudentscontact.utils.Urls;
 
 import java.util.ArrayList;
 
@@ -17,8 +18,8 @@ public class ChooseDepartment extends AppCompatActivity {
     Toolbar mToolBar;
 
     DepartmentsAdapter mAdapter;
-    RecyclerView mDeptList;
-    ArrayList<Department> depts;
+    RecyclerView mList;
+    ArrayList<Department> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +27,11 @@ public class ChooseDepartment extends AppCompatActivity {
         setContentView(R.layout.activity_student_choose_department);
 
         mToolBar = findViewById(R.id.toolbar);
-        mDeptList = findViewById(R.id.rv);
+        mList = findViewById(R.id.rv);
 
         setSupportActionBar(mToolBar);
 
-        depts = new ArrayList<Department>()
+        list = new ArrayList<Department>()
         {{
             add(new Department(1, "technology"));
             add(new Department(2,"hoqoqe"));
@@ -44,8 +45,8 @@ public class ChooseDepartment extends AppCompatActivity {
         }};
 
 
-        mAdapter = new DepartmentsAdapter(this, depts);
-        mDeptList.setAdapter(mAdapter);
+        mAdapter = new DepartmentsAdapter(this, list);
+        mList.setAdapter(mAdapter);
 
 
 
@@ -53,6 +54,9 @@ public class ChooseDepartment extends AppCompatActivity {
 
     //todo api call
     void getAllDepartments(){
+
+        String url = Urls.GET_DEPARTMENTS;
+
 
     }
 }

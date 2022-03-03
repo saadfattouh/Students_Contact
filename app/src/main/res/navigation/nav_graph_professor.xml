@@ -3,21 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_professor"
-    app:startDestination="@id/answerQuestionsFragment">
+    app:startDestination="@id/menu_requested_questions">
 
     <fragment
-        android:id="@+id/answerQuestionsFragment"
-        android:name="com.example.shaqrastudentscontact.professor.fragments.AnswerQuestionsFragment"
+        android:id="@+id/menu_requested_questions"
+        android:name="com.example.shaqrastudentscontact.professor.fragments.ProfessorRequestedQuestionsFragment"
         android:label="fragment_professor_answer_questions"
-        tools:layout="@layout/fragment_professor_answer_questions" />
+        tools:layout="@layout/fragment_professor_requested_questions" >
+        <action
+            android:id="@+id/action_menu_requested_questions_to_ReplyToQuestionFragment"
+            app:destination="@id/ReplyToQuestionFragment"
+            app:popUpTo="@id/menu_requested_questions"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ReplyToQuestionFragment"
+        android:name="com.example.shaqrastudentscontact.professor.fragments.ProfessorReplyQuestionFragment"
+        android:label="@string/reply"
+        tools:layout="@layout/fragment_professor_reply_question" />
     <fragment
         android:id="@+id/profile"
-        android:name="com.example.shaqrastudentscontact.professor.fragments.Profile"
+        android:name="com.example.shaqrastudentscontact.professor.fragments.ProfessorProfileFragment"
         android:label="fragment_professor_profile"
-        tools:layout="@layout/fragment_professor_profile" />
+        tools:layout="@layout/fragment_professor_profile"></fragment>
+
+
     <fragment
         android:id="@+id/scheduleFreeTime"
         android:name="com.example.shaqrastudentscontact.professor.fragments.ScheduleFreeTime"
         android:label="fragment_professor_schedule_free_time"
         tools:layout="@layout/fragment_professor_schedule_free_time" />
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout"
+        android:actionLayout="@layout/fragment_student_profile"
+        />
+
 </navigation>

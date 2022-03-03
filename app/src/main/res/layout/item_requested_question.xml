@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/postLayout"
+        android:background="@drawable/bg_post"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_person"
+                android:layout_marginStart="16dp"
+                app:civ_circle_background_color="@android:color/darker_gray"
+                android:layout_marginEnd="10dp"/>
+
+            <LinearLayout
+                android:id="@+id/layout_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toEndOf="@id/img"
+                android:layout_toStartOf="@id/is_replied">
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingBottom="4dp"
+                    android:textSize="18sp"
+                    android:text="Abdullah Almutairi"
+                    android:textColor="@android:color/black" />
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:alpha="0.6"
+                    android:text="2 days ago"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/is_replied"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:checked="true"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/middle_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/top_layout"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/question_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="3dp"
+                android:textSize="18sp"
+                android:textColor="@color/input_register_bg"
+                android:alpha="0.9"
+                android:text="Question about something"/>
+
+            <TextView
+                android:id="@+id/question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:alpha="0.9"
+                android:text="I have a question about this idea"/>
+
+            <!--this wil show a dilaog contain the answer-->
+            <TextView
+                android:id="@+id/replies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:padding="4dp"
+                android:text="@string/replies"
+                android:textColor="@color/blue_light"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_question_et"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/reply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="@string/reply"
+                    android:gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

@@ -4,11 +4,21 @@ public class ProfessorQuestion {
 
     int id;
     int studentID;
+    String studentName;
     int professorId;
     String title;
     String details;
     String answer;
 
+    public ProfessorQuestion(int id, int studentID, String studentName, int professorId, String title, String details, String answer) {
+        this.id = id;
+        this.studentID = studentID;
+        this.studentName = studentName;
+        this.professorId = professorId;
+        this.title = title;
+        this.details = details;
+        this.answer = answer;
+    }
     public ProfessorQuestion(int id, int studentID, int professorId, String title, String details, String answer) {
         this.id = id;
         this.studentID = studentID;
@@ -17,8 +27,6 @@ public class ProfessorQuestion {
         this.details = details;
         this.answer = answer;
     }
-
-
     public int getId() {
         return id;
     }

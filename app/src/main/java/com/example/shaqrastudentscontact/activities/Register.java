@@ -41,7 +41,15 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        bindViews();
+        mNameET = findViewById(R.id.name);
+        mPassET = findViewById(R.id.password);
+        mEmailET = findViewById(R.id.email);
+
+
+        mRegisterBtn = findViewById(R.id.btnRegister);
+        mToLoginBtn = findViewById(R.id.btnLinkToLoginScreen);
+
+        mAccountTypeSelector = findViewById(R.id.type_selector);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -63,7 +71,7 @@ public class Register extends AppCompatActivity {
         mAccountTypeSelector.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId){
                 case R.id.student:
-                    selectedUserType = Constants.USER_TYPE_MAIN;
+                    selectedUserType = Constants.USER_TYPE_STUDENT;
                     break;
                 case R.id.professor:
                     selectedUserType = Constants.USER_TYPE_PROFESSOR;
@@ -75,17 +83,6 @@ public class Register extends AppCompatActivity {
 
     }
 
-    private void bindViews() {
-        mNameET = findViewById(R.id.name);
-        mPassET = findViewById(R.id.password);
-        mEmailET = findViewById(R.id.email);
-
-
-        mRegisterBtn = findViewById(R.id.btnRegister);
-        mToLoginBtn = findViewById(R.id.btnLinkToLoginScreen);
-
-        mAccountTypeSelector = findViewById(R.id.type_selector);
-    }
 
     private boolean validateUserInput() {
 
@@ -101,7 +98,6 @@ public class Register extends AppCompatActivity {
             return false;
         }
 
-
         //checking if email is empty
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, getResources().getString(R.string.email_missing_message), Toast.LENGTH_SHORT).show();
@@ -116,7 +112,6 @@ public class Register extends AppCompatActivity {
             return false;
         }
 
-
         if(selectedUserType == -1){
             Toast.makeText(this, getResources().getString(R.string.type_missing_message), Toast.LENGTH_SHORT).show();
             mRegisterBtn.setEnabled(true);
@@ -127,15 +122,13 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-            }else if(selectedUserType == Constants.USER_TYPE_MAIN){
+            }else if(selectedUserType == Constants.USER_TYPE_STUDENT){
                 if(!email.contains(getResources().getString(R.string.student_email_suffex))){
                     Toast.makeText(this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
                     return false;
                 }
             }
         }
-
-
 
         return true;
     }
@@ -144,13 +137,12 @@ public class Register extends AppCompatActivity {
         pDialog.setMessage("Processing Please wait...");
         pDialog.show();
 
+        String url = Urls.REGISTER_URL;
+
         //first getting the values
         final String pass = mPassET.getText().toString();
         final String name = mNameET.getText().toString();
         final String email = mEmailET.getText().toString();
-
-
-        String url = Urls.BASE_URL + Urls.REGISTER_URL;
 
         AndroidNetworking.post(url)
                 .addBodyParameter("type", String.valueOf(selectedUserType))

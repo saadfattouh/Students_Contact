@@ -3,7 +3,7 @@ package com.example.shaqrastudentscontact.utils;
 public class Constants {
 
 
-    public static final int USER_TYPE_MAIN = 0;
+    public static final int USER_TYPE_STUDENT = 0;
     public static final int USER_TYPE_PROFESSOR = 1;
 
     public static final int STUDENT_TYPE_NORMAL = 0;

@@ -42,25 +42,73 @@
     </fragment>
     <fragment
         android:id="@+id/menu_honor_students"
-        android:name="com.example.shaqrastudentscontact.student.fragments.HonorStudents"
-        android:label="Honor Students"
-        tools:layout="@layout/fragment_student_honor_students" />
+        android:name="com.example.shaqrastudentscontact.chat.ChatListFragment"
+        android:label="@string/honor_student_chat_list"
+        tools:layout="@layout/fragment_chat_list">
+        <action
+            android:id="@+id/action_HonorStudent_to_ChattingFragment"
+            app:destination="@id/ChattingFragment"
+            app:popUpTo="@id/menu_honor_students" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ChattingFragment"
+        android:name="com.example.shaqrastudentscontact.chat.ChattingFragment"
+        android:label="@string/chatting"
+        tools:layout="@layout/fragment_chatting" />
+
+
     <fragment
         android:id="@+id/menu_books"
         android:name="com.example.shaqrastudentscontact.student.fragments.BooksListFragment"
         android:label="Books List"
-        tools:layout="@layout/fragment_students_books_list" />
+        tools:layout="@layout/fragment_students_books_list">
+        <action
+            android:id="@+id/action_Books_to_BookViewFragment"
+            app:destination="@id/BookViewFragment"
+            app:popUpTo="@id/menu_books" />
+    </fragment>
+    <fragment
+        android:id="@+id/BookViewFragment"
+        android:name="com.example.shaqrastudentscontact.student.fragments.BookViewFragment"
+        android:label="@string/book"
+        tools:layout="@layout/fragment_book_view" />
 
     <fragment
         android:id="@+id/menu_student_profile"
         android:name="com.example.shaqrastudentscontact.student.fragments.StudentProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_student_profile" />
+        tools:layout="@layout/fragment_student_profile">
+        <action
+            android:id="@+id/action_Profile_to_EditPassFragment"
+            app:destination="@id/EditPassFragment"
+            app:popUpTo="@id/menu_student_profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/EditPassFragment"
+        android:name="com.example.shaqrastudentscontact.student.EditPasswordFragment"
+        android:label="@string/edit_password"
+        tools:layout="@layout/fragment_edit_password" />
     <fragment
         android:id="@+id/askProfessorFragment"
         android:name="com.example.shaqrastudentscontact.student.fragments.AskProfessorFragment"
         android:label="fragment_ask_professor"
         tools:layout="@layout/fragment_ask_professor" />
 
-
+    <fragment
+        android:id="@+id/menu_requested_questions"
+        android:name="com.example.shaqrastudentscontact.honor_student.fragments.HonorStudentRequestedQuestionsFragment"
+        android:label="fragment_professor_answer_questions"
+        tools:layout="@layout/fragment_professor_requested_questions" >
+        <action
+            android:id="@+id/action_menu_requested_questions_to_ReplyToQuestionFragment"
+            app:destination="@id/ReplyToQuestionFragment"
+            app:popUpTo="@id/menu_requested_questions"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/ReplyToQuestionFragment"
+        android:name="com.example.shaqrastudentscontact.professor.fragments.ProfessorReplyQuestionFragment"
+        android:label="@string/reply"
+        tools:layout="@layout/fragment_professor_reply_question" />
 </navigation>

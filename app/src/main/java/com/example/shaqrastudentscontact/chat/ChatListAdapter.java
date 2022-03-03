@@ -68,7 +68,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 Bundle bundle = new Bundle();
                 bundle.putString("from_id", chat.getFromId());
                 bundle.putString("user_name", chat.getUserName());
-//                navController.navigate(R.id.action_chatListFragment_to_chattingFragment,bundle);
+                navController.navigate(R.id.action_HonorStudent_to_ChattingFragment,bundle);
             }
         });
 
@@ -91,10 +91,5 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             this.name = itemView.findViewById(R.id.person_name);
         }
     }
-
-
-
-
-
 
 }

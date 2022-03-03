@@ -8,7 +8,7 @@ public class Reply {
     private String reply;
     private String date;
 
-    public Reply(int id, String studentName, String reply, String date, boolean common) {
+    public Reply(int id, String studentName, String reply, String date) {
         this.id = id;
         this.studentName = studentName;
         this.reply = reply;

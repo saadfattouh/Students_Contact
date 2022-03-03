@@ -30,7 +30,7 @@ public class ProfessorMain extends AppCompatActivity implements DrawerLayout.Dra
 
     SharedPrefManager prefManager;
 
-    int destination = R.id.answerQuestionsFragment;
+    int destination = R.id.menu_requested_questions;
 
     AppBarConfiguration mAppBarConfiguration;
 
@@ -58,7 +58,7 @@ public class ProfessorMain extends AppCompatActivity implements DrawerLayout.Dra
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.answerQuestionsFragment, R.id.scheduleFreeTime, R.id.profile).setOpenableLayout(drawerLayout).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.menu_requested_questions, R.id.scheduleFreeTime, R.id.profile).setOpenableLayout(drawerLayout).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
@@ -95,8 +95,8 @@ public class ProfessorMain extends AppCompatActivity implements DrawerLayout.Dra
 
         switch (id) {
 
-            case R.id.students_questions:
-                destination = R.id.answerQuestionsFragment;
+            case R.id.menu_requested_questions:
+                destination = R.id.menu_requested_questions;
                 break;
 
             case R.id.update_schedule:

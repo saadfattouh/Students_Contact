@@ -75,7 +75,6 @@ public class CommunityAdapter  extends RecyclerView.Adapter<CommunityAdapter.Vie
         holder.replies.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: go to replies
                 navController = Navigation.findNavController(holder.itemView);
                 Bundle bundle = new Bundle();
                 bundle.putString("question_id", String.valueOf(question.getId()));

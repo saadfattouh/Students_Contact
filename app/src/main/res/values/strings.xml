@@ -88,6 +88,14 @@
     <string name="asked_questions">Asked questions</string>
     <string name="answer">Answer</string>
     <string name="no_answer_yet">No answer yet</string>
+    <string name="reply_content">Reply Content</string>
+    <string name="edit_password">Edit Password</string>
+    <string name="chatting">Chatting</string>
+    <string name="honor_student_chat_list">Honor Student Chat List</string>
+    <string name="bookmarked">Book Marked</string>
+    <string name="screenshot">Screenshot</string>
+    <string name="book">Book</string>
+    <string name="empty_reply">You can not send an empty reply</string>
 
 
 </resources>

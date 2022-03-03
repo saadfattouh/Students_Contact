@@ -22,6 +22,7 @@ public class Splash extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 nextPhase();
             }
         }, TIME_TO_START);

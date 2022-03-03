@@ -1,7 +1,8 @@
 package com.example.shaqrastudentscontact.student.fragments;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,14 +16,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.ProfessorQuestion;
-import com.example.shaqrastudentscontact.models.Question;
-import com.example.shaqrastudentscontact.professor.fragments.AnswerQuestionsFragment;
 import com.example.shaqrastudentscontact.student.adapters.QuestionRepliesAdapter;
+import com.example.shaqrastudentscontact.utils.Urls;
 
-import org.w3c.dom.Text;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -40,6 +46,7 @@ public class ProfessorDetailsFragment extends Fragment {
     RecyclerView mQuestionsList;
     QuestionRepliesAdapter mAdapter;
     ArrayList<ProfessorQuestion> questions;
+    ProgressDialog pDialog;
 
 
     @Override
@@ -101,5 +108,56 @@ public class ProfessorDetailsFragment extends Fragment {
         mAdapter = new QuestionRepliesAdapter(ctx, questions);
         mQuestionsList.setAdapter(mAdapter);
 
+    }
+
+    private void getQuestionsToProf(){
+        String url = Urls.GET_QUESTIONS_TO_PROF;
+        pDialog.setMessage("Processing Please wait...");
+        pDialog.show();
+
+        AndroidNetworking.post(url).setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // do anything with response
+                        pDialog.dismiss();
+                        try {
+                            //converting response to json object
+                            JSONObject obj = response;
+                            //if no error in response
+                            if (obj.getInt("status") == 1) {
+//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+//
+//                                //getting the user from the response
+//                                JSONObject userJson = obj.getJSONObject("data");
+//                                User user;
+//                                SharedPrefManager.getInstance(getApplicationContext()).setUserType(Constants.USER);
+//                                user = new User(
+//                                        Integer.parseInt(userJson.getString("id")),
+//                                        userJson.getString("name"),
+//                                        "+966 "+userJson.getString("email")
+//                                );
+//
+//                                //storing the user in shared preferences
+//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+//                                goToUserMainActivity();
+//                                finish();
+//
+//                                mRegisterBtn.setEnabled(true);
+//                            } else if(obj.getInt("status") == -1){
+//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                                mRegisterBtn.setEnabled(true);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+                        pDialog.dismiss();
+                        Toast.makeText(ctx, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

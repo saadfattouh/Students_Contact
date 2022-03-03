@@ -186,7 +186,7 @@ public class ChattingFragment extends Fragment {
         pDialog.setMessage("Processing Please wait...");
         pDialog.show();
 
-        String url = Urls.GET_MESSAGES_WITH + "&user_id="+SharedPrefManager.getInstance(getContext()).getUserId() + "&with_id="+ from_id;
+        String url = Urls.GET_MESSAGES_LIST + "&user_id="+SharedPrefManager.getInstance(getContext()).getUserId() + "&with_id="+ from_id;
 
         messages = new ArrayList<>();
 
