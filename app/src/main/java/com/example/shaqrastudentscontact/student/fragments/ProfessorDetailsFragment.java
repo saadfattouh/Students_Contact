@@ -1,6 +1,5 @@
 package com.example.shaqrastudentscontact.student.fragments;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -92,16 +91,16 @@ public class ProfessorDetailsFragment extends Fragment {
 
         questions = new ArrayList<ProfessorQuestion>()
         {{
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "I need help", "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
 
         }};
 

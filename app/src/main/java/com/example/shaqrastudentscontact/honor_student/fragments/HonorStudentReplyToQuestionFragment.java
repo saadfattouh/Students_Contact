@@ -22,6 +22,8 @@ public class HonorStudentReplyToQuestionFragment extends Fragment {
     EditText mReplyContent;
     Button mReplyBtn;
 
+    String questionId;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -36,7 +38,9 @@ public class HonorStudentReplyToQuestionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if(getArguments() != null){
+            questionId = getArguments().getString("question_id");
+        }
     }
 
     @Override
@@ -64,6 +68,9 @@ public class HonorStudentReplyToQuestionFragment extends Fragment {
         });
     }
 
+    //todo api call (send reply with question id and reply)
     private void sendReply() {
+        String reply = mReplyContent.getText().toString();
+        //send reply...
     }
 }

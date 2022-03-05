@@ -76,17 +76,6 @@
             android:layout_below="@id/top_layout"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/question_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginBottom="3dp"
-                android:textSize="18sp"
-                android:textColor="@color/input_register_bg"
-                android:alpha="0.9"
-                android:text="Question about something"/>
 
             <TextView
                 android:id="@+id/question"
@@ -107,7 +96,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
                 android:padding="4dp"
-                android:text="@string/replies"
+                android:text="@string/show_reply"
                 android:textColor="@color/blue_light"
                 android:gravity="center"/>
 

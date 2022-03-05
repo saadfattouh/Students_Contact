@@ -48,29 +48,29 @@ public class QuestionRepliesAdapter extends RecyclerView.Adapter<QuestionReplies
 
         ProfessorQuestion question = list.get(position);
 
-        holder.title.setText(question.getTitle());
-        holder.details.setText(question.getDetails());
+        holder.title.setText(question.getStudentName());
+        holder.details.setText(question.getContent());
 
         holder.itemView.setOnClickListener(v -> {
             LayoutInflater factory = LayoutInflater.from(context);
-        final View view = factory.inflate(R.layout.dialog_question_reply, null);
-        final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
-        questionReplyDialog.setView(view);
-        questionReplyDialog.setCanceledOnTouchOutside(true);
+            final View view = factory.inflate(R.layout.dialog_question_reply, null);
+            final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
+            questionReplyDialog.setView(view);
+            questionReplyDialog.setCanceledOnTouchOutside(true);
 
-        TextView title = view.findViewById(R.id.title);
-        TextView details = view.findViewById(R.id.question);
-        TextView reply = view.findViewById(R.id.answer);
+            TextView title = view.findViewById(R.id.title);
+            TextView details = view.findViewById(R.id.question);
+            TextView reply = view.findViewById(R.id.answer);
 
-        title.setText(question.getTitle());
-        details.setText(question.getDetails());
-        if(question.getAnswer() != null || question.getAnswer().isEmpty()){
-            reply.setText(question.getAnswer());
-        }else {
-            reply.setText(context.getResources().getString(R.string.no_answer_yet));
-        }
+            title.setText(question.getStudentName());
+            details.setText(question.getContent());
+            if(question.getAnswer() != null || question.getAnswer().isEmpty()){
+                reply.setText(question.getAnswer());
+            }else {
+                reply.setText(context.getResources().getString(R.string.no_answer_yet));
+            }
 
-        questionReplyDialog.show();
+            questionReplyDialog.show();
     });
 
 

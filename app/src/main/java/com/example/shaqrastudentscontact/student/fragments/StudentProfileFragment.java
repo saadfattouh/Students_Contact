@@ -56,13 +56,13 @@ public class StudentProfileFragment extends Fragment {
         SharedPrefManager sp = SharedPrefManager.getInstance(ctx);
         Student student = sp.getStudentData();
 
-        nameTV = view.findViewById(R.id.name);
+        nameTV = view.findViewById(R.id.student_name);
         typeTV = view.findViewById(R.id.type);
         emailTV = view.findViewById(R.id.email);
         editPassBtn = view.findViewById(R.id.edit_password);
 
         nameTV.setText(student.getName());
-        typeTV.setText(student.getType());
+        typeTV.setText(String.valueOf(student.getType()));
         emailTV.setText(student.getEmail());
         editPassBtn.setOnClickListener(new View.OnClickListener() {
             @Override

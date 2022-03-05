@@ -43,7 +43,7 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
 
-        accountType = prefManager.getStudentType();
+        accountType = Constants.STUDENT_TYPE_HONOR;
 
         setupNavigation(accountType);
     }

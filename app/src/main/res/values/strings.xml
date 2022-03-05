@@ -96,6 +96,7 @@
     <string name="screenshot">Screenshot</string>
     <string name="book">Book</string>
     <string name="empty_reply">You can not send an empty reply</string>
+    <string name="show_reply">Show your reply</string>
 
 
 </resources>
