@@ -9,6 +9,7 @@ public class ProfessorQuestion {
     String title;
     String details;
     String answer;
+    String date;
 
     public ProfessorQuestion(int id, int studentID, String studentName, int professorId, String title, String details, String answer) {
         this.id = id;
@@ -73,5 +74,13 @@ public class ProfessorQuestion {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public String getDate() {
+        return date;
     }
 }

@@ -26,4 +26,5 @@ public class Urls {
 
     //PROFESSOR
     public static final String LOGIN_PROF_URL = BASE_URL + "";
+
 }

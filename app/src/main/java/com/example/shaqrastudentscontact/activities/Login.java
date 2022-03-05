@@ -3,6 +3,7 @@ package com.example.shaqrastudentscontact.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +17,16 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.shaqrastudentscontact.models.Professor;
+import com.example.shaqrastudentscontact.models.Student;
+import com.example.shaqrastudentscontact.student.StudentMain;
 import com.example.shaqrastudentscontact.utils.Constants;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.professor.ProfessorMain;
 import com.example.shaqrastudentscontact.student.ChooseDepartment;
+import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.example.shaqrastudentscontact.utils.Urls;
+import com.example.shaqrastudentscontact.utils.Validation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +35,6 @@ import org.json.JSONObject;
 public class Login extends AppCompatActivity {
 
     private Button mLoginBtn;
-    private Button mToRegisterBtn;
     private EditText mEmailET;
     private EditText mPassET;
     private ProgressDialog pDialog;
@@ -45,7 +50,6 @@ public class Login extends AppCompatActivity {
         mEmailET = findViewById(R.id.email);
         mPassET =  findViewById(R.id.password);
         mLoginBtn =  findViewById(R.id.btnLogin);
-        mToRegisterBtn =  findViewById(R.id.btnLinkToRegisterScreen);
         mAccountTypeSelector = findViewById(R.id.type_selector);
 
         // Progress dialog
@@ -111,15 +115,7 @@ public class Login extends AppCompatActivity {
         });
 
 
-        // Link to Register Screen
-        mToRegisterBtn.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),
-                        Register.class);
-                startActivity(i);
-            }
-        });
 
     }
 
@@ -133,8 +129,8 @@ public class Login extends AppCompatActivity {
         String url = Urls.LOGIN_USER_URL;
 
         AndroidNetworking.post(url)
-                .addBodyParameter("password", password)
                 .addBodyParameter("email", email)
+                .addBodyParameter("password", password)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -149,30 +145,32 @@ public class Login extends AppCompatActivity {
                             //if no error in response
                             if (obj.getInt("status") == 1) {
 
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("data");
-//                                User user;
-//                                SharedPrefManager.getInstance(getApplicationContext()).setUserType(Constants.USER);
-//                                user = new User(
-//                                        Integer.parseInt(userJson.getString("id")),
-//                                        userJson.getString("name"),
-//                                        "+966 "+userJson.getString("phone")
-//                                );
-//
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//                                goToUserMainActivity();
-//                                finish();
-//
-//                                mRegisterBtn.setEnabled(true);
-//                            } else if(obj.getInt("status") == -1){
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                                mRegisterBtn.setEnabled(true);
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                                //getting the user from the response
+                                JSONObject userJson = obj.getJSONObject("data");
+                                Student user;
+                                user = new Student(
+                                        Integer.parseInt(
+                                        userJson.getString("id")),
+                                        userJson.getString("name"),
+                                        userJson.getString("email"),
+                                        Integer.parseInt(userJson.getString("type"))
+
+                                );
+
+                                //storing the user in shared preferences
+                                SharedPrefManager.getInstance(getApplicationContext()).studentLogin(user);
+                                goToUserMainActivity();
+                                finish();
+
+                                mLoginBtn.setEnabled(true);
+                            } else if(obj.getInt("status") == -1){
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                                mLoginBtn.setEnabled(true);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.e("login student", e.getMessage());
 
                         }
 
@@ -183,23 +181,31 @@ public class Login extends AppCompatActivity {
                         pDialog.dismiss();
                         mLoginBtn.setEnabled(true);
                         Toast.makeText(Login.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("login student", anError.getMessage());
+
                     }
                 });
 
 
     }
 
-    private void loginProfessor(String email, String password) {
-        startActivity(new Intent(this, ProfessorMain.class));
+    private void goToUserMainActivity() {
+        startActivity(new Intent(Login.this, StudentMain.class));
         finish();
+    }
+    private void goToProfMainActivity() {
+        startActivity(new Intent(Login.this, ProfessorMain.class));
+        finish();
+    }
+    private void loginProfessor(String email, String password) {
         pDialog.setMessage("Processing Please wait...");
         pDialog.show();
 
         String url = Urls.LOGIN_PROF_URL;
 
         AndroidNetworking.post(url)
-                .addBodyParameter("password", password)
                 .addBodyParameter("email", email)
+                .addBodyParameter("password", password)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -214,40 +220,41 @@ public class Login extends AppCompatActivity {
                             //if no error in response
                             if (obj.getInt("status") == 1) {
 
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("data");
-//                                User user;
-//                                SharedPrefManager.getInstance(getApplicationContext()).setUserType(Constants.USER);
-//                                user = new User(
-//                                        Integer.parseInt(userJson.getString("id")),
-//                                        userJson.getString("name"),
-//                                        "+966 "+userJson.getString("phone")
-//                                );
-//
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//                                goToUserMainActivity();
-//                                finish();
-//
-//                                mRegisterBtn.setEnabled(true);
-//                            } else if(obj.getInt("status") == -1){
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                                mRegisterBtn.setEnabled(true);
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                                //getting the user from the response
+                                JSONObject userJson = obj.getJSONObject("data");
+                                Professor user;
+                                user = new Professor(
+                                        Integer.parseInt(userJson.getString("id")),
+                                        userJson.getString("name"),
+                                        userJson.getString("deptName"),
+                                        userJson.getString("email"),
+                                        userJson.getString("specialization")
+                                );
+
+                                //storing the user in shared preferences
+                                SharedPrefManager.getInstance(getApplicationContext()).professorLogin(user);
+                                goToUserMainActivity();
+                                finish();
+
+                                mLoginBtn.setEnabled(true);
+                            } else if(obj.getInt("status") == -1){
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                                mLoginBtn.setEnabled(true);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-
+                            Log.e("login prof", e.getMessage());
                         }
-
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         pDialog.dismiss();
                         mLoginBtn.setEnabled(true);
                         Toast.makeText(Login.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("login prof", anError.getMessage());
+
                     }
                 });
 

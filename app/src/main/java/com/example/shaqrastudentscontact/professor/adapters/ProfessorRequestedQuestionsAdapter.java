@@ -10,11 +10,13 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.models.ProfessorQuestion;
 import com.example.shaqrastudentscontact.models.Question;
 
 import java.util.ArrayList;
@@ -24,12 +26,12 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
 
 
     Context context;
-    private List<Question> list;
+    private List<ProfessorQuestion> list;
     public NavController navController;
 
 
     // RecyclerView recyclerView;
-    public ProfessorRequestedQuestionsAdapter(Context context, ArrayList<Question> list) {
+    public ProfessorRequestedQuestionsAdapter(Context context, ArrayList<ProfessorQuestion> list) {
         this.context = context;
         this.list = list;
     }
@@ -49,16 +51,15 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
     @Override
     public void onBindViewHolder(@NonNull ProfessorRequestedQuestionsAdapter.ViewHolder holder, int position) {
 
-        Question question = list.get(position);
+        ProfessorQuestion question = list.get(position);
 
 
         holder.studentName.setText(question.getStudentName());
-        holder.question.setText(question.getQuestion());
+        holder.question.setText(question.getTitle());
         holder.date.setText(question.getDate());
         holder.addReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: go to replies
                 navController = Navigation.findNavController(holder.itemView);
                 Bundle bundle = new Bundle();
                 bundle.putString("question_id", String.valueOf(question.getId()));
@@ -69,8 +70,25 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
         holder.replies.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: show reply in dialog
+                LayoutInflater factory = LayoutInflater.from(context);
+                final View view = factory.inflate(R.layout.dialog_question_reply, null);
+                final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
+                questionReplyDialog.setView(view);
+                questionReplyDialog.setCanceledOnTouchOutside(true);
 
+                TextView title = view.findViewById(R.id.title);
+                TextView details = view.findViewById(R.id.question);
+                TextView reply = view.findViewById(R.id.answer);
+
+                title.setText(question.getTitle());
+                details.setText(question.getDetails());
+                if(question.getAnswer() != null || question.getAnswer().isEmpty()){
+                    reply.setText(question.getAnswer());
+                }else {
+                    reply.setText(context.getResources().getString(R.string.no_answer_yet));
+                }
+
+                questionReplyDialog.show();
             }
         });
 
