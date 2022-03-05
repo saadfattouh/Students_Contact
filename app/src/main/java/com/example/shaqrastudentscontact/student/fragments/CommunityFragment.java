@@ -84,7 +84,6 @@ public class CommunityFragment extends Fragment {
         mList = view.findViewById(R.id.rv);
         contentTypeSelector = view.findViewById(R.id.questions_type_selector);
 
-
         ArrayList<Question> list = new ArrayList<Question>(){{
             add(new Question(1,"student","what is this ?", "12-12-2022",true ));
             add(new Question(1,"student","what is this ?", "12-12-2022",false ));
@@ -112,7 +111,6 @@ public class CommunityFragment extends Fragment {
         contentTypeSelector.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton allBtn = view.findViewById(R.id.all);
             RadioButton commonBtn = view.findViewById(R.id.common);
-            RadioButton unselectedBtn;
 
             switch (checkedId){
                 case R.id.all:
