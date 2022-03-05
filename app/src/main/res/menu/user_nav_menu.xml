@@ -34,10 +34,7 @@
         android:title="@string/profile"
         android:actionLayout="@layout/fragment_student_profile"
         />
-    <item
-        android:id="@+id/menu_requested_questions"
-        android:icon="@drawable/ic_answer_questions"
-        android:title="@string/students_questions" />
+
     <item
         android:id="@+id/menu_logout"
         android:icon="@drawable/ic_logout"

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menu_community"
+            android:icon="@drawable/ic_community"
+            android:title="@string/community"
+            android:actionLayout="@layout/fragment_student_community"
+            />
+
+        <item
+            android:id="@+id/menu_professors"
+            android:icon="@drawable/ic_teacher"
+            android:title="@string/ask_professors"
+            android:actionLayout="@layout/fragment_student_professors"
+            />
+        <item
+            android:id="@+id/menu_honor_students"
+            android:icon="@drawable/ic_honor_student"
+            android:title="@string/ask_honor_students"
+            android:actionLayout="@layout/fragment_student_honor_students"
+            />
+        <item
+            android:id="@+id/menu_books"
+            android:icon="@drawable/ic_book_library"
+            android:title="@string/books_list"
+            android:actionLayout="@layout/fragment_students_books_list"
+            />
+
+        <item
+            android:id="@+id/menu_student_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/profile"
+            android:actionLayout="@layout/fragment_student_profile"
+            />
+        <item
+            android:id="@+id/menu_requested_questions"
+            android:icon="@drawable/ic_answer_questions"
+            android:title="@string/students_questions" />
+        <item
+            android:id="@+id/menu_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout"
+            android:actionLayout="@layout/fragment_student_profile"
+            />
+    </group>
+
+</menu>
