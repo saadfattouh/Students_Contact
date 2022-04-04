@@ -22,6 +22,8 @@ public class ProfessorReplyQuestionFragment extends Fragment {
     EditText mReplyContent;
     Button mReplyBtn;
 
+    int question_id;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -62,6 +64,7 @@ public class ProfessorReplyQuestionFragment extends Fragment {
         });
     }
 
+    //todo solve the issues  with back-end code first !
     private void sendReply() {
     }
 }

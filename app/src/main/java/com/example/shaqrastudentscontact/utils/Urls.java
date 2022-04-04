@@ -26,9 +26,15 @@ public class Urls {
     public static final String GET_QUESTION_REPLIES = BASE_URL +  "get_community_question_replies";
     public static final String POST_REPLY_FOR_QUESTION = BASE_URL +  "post_community_reply";
 
+    public static final String GET_PROFESSOR_QUESTIONS = BASE_URL + "get_professor_questions";
+    public static final String ANSWER_PROFESSOR_QUESTION = BASE_URL + "answer_professor_question";
+
+    public static final String GET_HONOR_QUESTIONS = BASE_URL + "get_honor_questions";
+    public static final String ANSWER_HONOR_QUESTION = BASE_URL + "answer_honor_question";
+
 
     //PROFESSOR
-    public static final String PROFESSOR_SCHEDULE = BASE_URL + "";
+    public static final String PROFESSOR_SCHEDULE = BASE_URL + "update_professor_schedule";
 
     public static final String EMAIL_VERIFICATION = BASE_URL +  "";
 }
