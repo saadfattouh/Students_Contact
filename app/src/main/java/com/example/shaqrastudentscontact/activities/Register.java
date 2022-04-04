@@ -92,6 +92,7 @@ public class Register extends AppCompatActivity {
                     i.putExtra(Constants.PROFESSOR_EMAIL, mEmailET.getText().toString().trim());
                     i.putExtra(Constants.PROFESSOR_PASS, mPassET.getText().toString().trim());
                     i.putExtra(Constants.PROFESSOR_SPEC, mSpecializationET.getText().toString().trim());
+                    i.putExtra(Constants.FROM, selectedUserType);
 
                     startActivity(i);
                 }
