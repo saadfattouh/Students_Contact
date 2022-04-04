@@ -85,7 +85,6 @@ public class CommunityAdapter  extends RecyclerView.Adapter<CommunityAdapter.Vie
 
     }
 
-
     @Override
     public int getItemCount() {
         return list.size();
@@ -112,11 +111,8 @@ public class CommunityAdapter  extends RecyclerView.Adapter<CommunityAdapter.Vie
                             if (question.isCommon())
                                 resultData.add(question);
                         }
-
-
                         filterResults.count = resultData.size();
                         filterResults.values = resultData;
-
                     }
                 }
                 return filterResults;

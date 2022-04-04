@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.Professor;
+import com.example.shaqrastudentscontact.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,13 @@ public class ProfessorsAdapter extends RecyclerView.Adapter<ProfessorsAdapter.Vi
 
 
     Context context;
-    private List<Professor> profs;
+    private List<Professor> list;
     public NavController navController;
 
     // RecyclerView recyclerView;
-    public ProfessorsAdapter(Context context, ArrayList<Professor> profs) {
+    public ProfessorsAdapter(Context context, ArrayList<Professor> list) {
         this.context = context;
-        this.profs = profs;
+        this.list = list;
     }
 
     @NonNull
@@ -45,18 +46,21 @@ public class ProfessorsAdapter extends RecyclerView.Adapter<ProfessorsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Professor prof = profs.get(position);
+        Professor prof = list.get(position);
         holder.profName.setText(prof.getName());
         holder.profDept.setText(prof.getDeptName());
         holder.profSpec.setText(prof.getSpecialization());
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navController = Navigation.findNavController(holder.itemView);
                 Bundle bundle = new Bundle();
-                bundle.putString("prof_id", String.valueOf(prof.getId()));
+                bundle.putString(Constants.PROFESSOR_KEY, String.valueOf(prof.getId()));
+                bundle.putString(Constants.PROFESSOR_NAME, prof.getName());
+                bundle.putString(Constants.PROFESSOR_EMAIL, prof.getEmail());
+                bundle.putString(Constants.PROFESSOR_FREE_TIME_START, prof.getStartFreeTime());
+                bundle.putString(Constants.PROFESSOR_FREE_TIME_END, prof.getEndFreeTime());
                 navController.navigate(R.id.action_profFragment_to_profDetailsFragment, bundle);
             }
         });
@@ -67,7 +71,7 @@ public class ProfessorsAdapter extends RecyclerView.Adapter<ProfessorsAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return profs.size();
+        return list.size();
     }
 
 

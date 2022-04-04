@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/menu_requested_questions"
         android:name="com.example.shaqrastudentscontact.professor.fragments.ProfessorRequestedQuestionsFragment"
-        android:label="fragment_professor_answer_questions"
+        android:label="@string/requested_question"
         tools:layout="@layout/fragment_professor_requested_questions" >
         <action
             android:id="@+id/action_menu_requested_questions_to_ReplyToQuestionFragment"
@@ -23,22 +23,29 @@
         android:label="@string/reply"
         tools:layout="@layout/fragment_professor_reply_question" />
     <fragment
-        android:id="@+id/profile"
+        android:id="@+id/menu_prof_profile"
         android:name="com.example.shaqrastudentscontact.professor.fragments.ProfessorProfileFragment"
-        android:label="fragment_professor_profile"
-        tools:layout="@layout/fragment_professor_profile"></fragment>
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_professor_profile">
+        <action
+            android:id="@+id/action_ProfessorProfile_to_EditPassFragment"
+            app:destination="@id/EditPassFragment"
+            app:popUpTo="@id/menu_prof_profile" />
+
+    </fragment>
 
 
     <fragment
-        android:id="@+id/scheduleFreeTime"
+        android:id="@+id/EditPassFragment"
+        android:name="com.example.shaqrastudentscontact.student.EditPasswordFragment"
+        android:label="@string/edit_password"
+        tools:layout="@layout/fragment_edit_password" />
+
+    <fragment
+        android:id="@+id/menu_update_schedule"
         android:name="com.example.shaqrastudentscontact.professor.fragments.ScheduleFreeTime"
-        android:label="fragment_professor_schedule_free_time"
+        android:label="@string/set_free_time_schedule"
         tools:layout="@layout/fragment_professor_schedule_free_time" />
-    <item
-        android:id="@+id/menu_logout"
-        android:icon="@drawable/ic_logout"
-        android:title="@string/logout"
-        android:actionLayout="@layout/fragment_student_profile"
-        />
+
 
 </navigation>

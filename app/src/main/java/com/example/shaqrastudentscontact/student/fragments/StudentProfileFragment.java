@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.Student;
+import com.example.shaqrastudentscontact.utils.Constants;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 
 
@@ -62,14 +63,11 @@ public class StudentProfileFragment extends Fragment {
         editPassBtn = view.findViewById(R.id.edit_password);
 
         nameTV.setText(student.getName());
-        typeTV.setText(String.valueOf(student.getType()));
+        typeTV.setText(student.getType()== Constants.STUDENT_TYPE_NORMAL?Constants.STUDENT_NORMAL:Constants.STUDENT_HONOR);
         emailTV.setText(student.getEmail());
-        editPassBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_Profile_to_EditPassFragment);
-            }
+        editPassBtn.setOnClickListener(v -> {
+            navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_Profile_to_EditPassFragment);
         });
     }
 }

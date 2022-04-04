@@ -15,7 +15,8 @@ public class SharedPrefManager {
     private static final String KEY_ID = "keyid";
     private static final String KEY_NAME = "keyname";
     private static final String KEY_EMAIL = "keyemail";
-    private static final String KEY_STUDENT_TYPE = "userType";
+    private static final String KEY_STUDENT_TYPE = "studentType";
+    private static final String KEY_USER_TYPE = "userType";
 
     //professor registration/ login
     private static final String KEY_PROFESSOR_DEPT_NAME = "keyprofessor_d_id";
@@ -47,7 +48,7 @@ public class SharedPrefManager {
         editor.putString(KEY_NAME, student.getName());
         editor.putString(KEY_EMAIL, student.getEmail());
         editor.putInt(KEY_STUDENT_TYPE, student.getType());
-
+        editor.putInt(KEY_USER_TYPE, Constants.USER_TYPE_STUDENT);
         editor.apply();
     }
 
@@ -60,6 +61,7 @@ public class SharedPrefManager {
         editor.putString(KEY_EMAIL, professor.getEmail());
         editor.putString(KEY_PROFESSOR_DEPT_NAME, professor.getDeptName());
         editor.putString(KEY_PROFESSOR_SPECIALIZATION, professor.getSpecialization());
+        editor.putInt(KEY_USER_TYPE, Constants.USER_TYPE_PROFESSOR);
 
         editor.apply();
     }
@@ -81,7 +83,10 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_STUDENT_TYPE, -1);
     }
-
+    public int getUserType(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_USER_TYPE, -1);
+    }
     public void setSelectedDept(int deptId){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

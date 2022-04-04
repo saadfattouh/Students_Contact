@@ -7,7 +7,6 @@ public class Question {
     private String studentName;
     private String question;
     private String date;
-    private ArrayList<String> answers;
     private boolean common;
     //receiverId for backend
 
@@ -33,10 +32,6 @@ public class Question {
 
     public String getQuestion() {
         return question;
-    }
-
-    public ArrayList<String> getAnswers() {
-        return answers;
     }
 
     public boolean isCommon() {

@@ -8,9 +8,13 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.professor.ProfessorMain;
+import com.example.shaqrastudentscontact.student.StudentMain;
+import com.example.shaqrastudentscontact.utils.Constants;
+import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 
 
-public class Splash extends AppCompatActivity {
+public class Splash extends AppCompatActivity{
 
     public static final int TIME_TO_START = 1500;
 
@@ -23,14 +27,20 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                nextPhase();
+                if(SharedPrefManager.getInstance(Splash.this).isLoggedIn()){
+                    if(SharedPrefManager.getInstance(Splash.this).getUserType() == Constants.USER_TYPE_STUDENT){
+                        startActivity(new Intent(Splash.this, StudentMain.class));
+                    }else{
+                        startActivity(new Intent(Splash.this, ProfessorMain.class));
+                    }
+                }else{
+                    startActivity(new Intent(Splash.this, Login.class));
+                }
+                finish();
             }
         }, TIME_TO_START);
 
     }
 
-    private void nextPhase() {
-        startActivity(new Intent(this, Login.class));
-        finish();
-    }
+
 }

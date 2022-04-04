@@ -3,53 +3,50 @@ package com.example.shaqrastudentscontact.student;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
-import com.example.shaqrastudentscontact.activities.UpdateProfile;
+import com.example.shaqrastudentscontact.utils.Constants;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.example.shaqrastudentscontact.utils.Urls;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class EditPasswordFragment extends Fragment {
+
     EditText mPassword, mConfirmPassword;
     Button mUpdateBtn;
-    Context ctx;
+    Context context;
 
-    SharedPrefManager sp;
-    private ProgressDialog pDialog;
+    ProgressDialog pDialog;
+    NavController navController;
 
-    public EditPasswordFragment() {
-    }
+    public EditPasswordFragment() {}
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.ctx = context;
+        this.context = context;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -66,84 +63,135 @@ public class EditPasswordFragment extends Fragment {
         mUpdateBtn = view.findViewById(R.id.btn_update);
 
         // Progress dialog
-        pDialog = new ProgressDialog(ctx);
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Processing Please wait...");
         pDialog.setCancelable(false);
+        navController = Navigation.findNavController(view);
 
-
-        sp = SharedPrefManager.getInstance(ctx);
-        int userId = sp.getUserId();
-        String pass = mPassword.getText().toString().trim();
         mUpdateBtn.setOnClickListener(v -> {
             if(validateUserInput()){
-                mUpdateBtn.setEnabled(false);
-                editPass(userId,pass);
+                if(validateUserInput()){
+                    int type = SharedPrefManager.getInstance(context).getUserType();
+                    if(type == Constants.USER_TYPE_STUDENT){
+                        editStudentPass();
+                    }else{
+                        editProfPass();
+                    }
+                }
             }
         });
 
     }
 
-    private void editPass(int userId, String pass) {
-
-        pDialog.setMessage("Processing Please wait...");
+    private void editStudentPass() {
+        mUpdateBtn.setEnabled(false);
         pDialog.show();
 
-        //first getting the values
+        String url = Urls.RESET_PASSWORD_STUDENT_URL;
+        String pass = mPassword.getText().toString().trim();
 
-        String url = Urls.RESET_PASSWORD_URL;
-
+        String studentId = String.valueOf(SharedPrefManager.getInstance(context).getUserId());
         AndroidNetworking.post(url)
+                .addBodyParameter("student_id", studentId)
                 .addBodyParameter("password", pass)
-                .addBodyParameter("user_id",String.valueOf(userId))
-
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
-                        pDialog.dismiss();
-
                         try {
-                            //converting response to json object
                             JSONObject obj = response;
-
+                            String message = obj.getString("message");
+                            String userFounded = "User founded";
                             //if no error in response
-                            if (obj.getInt("status") == 1) {
+                            if (message.toLowerCase().contains(userFounded.toLowerCase())) {
+                                Toast.makeText(context, context.getResources().getString(R.string.password_edit), Toast.LENGTH_SHORT).show();
+                            }
+                            mUpdateBtn.setEnabled(true);
+                            pDialog.dismiss();
+                            navController.popBackStack();
 
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("data");
-//                                User user;
-//                                SharedPrefManager.getInstance(getApplicationContext()).setUserType(Constants.USER);
-//                                user = new User(
-//                                        Integer.parseInt(userJson.getString("id")),
-//                                        userJson.getString("name"),
-//                                        "+966 "+userJson.getString("phone")
-//                                );
-//
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//                                goToUserMainActivity();
-//                                finish();
-//
-//                                mRegisterBtn.setEnabled(true);
-//                            } else if(obj.getInt("status") == -1){
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                                mRegisterBtn.setEnabled(true);
+                        } catch (JSONException e) {
+                            mUpdateBtn.setEnabled(true);
+                            pDialog.dismiss();
+                            e.printStackTrace();
+                            Log.e("editstprof catch", e.getMessage());
+                        }
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+                        mUpdateBtn.setEnabled(true);
+                        pDialog.dismiss();
+                        Log.e("editsterror", anError.getErrorBody());
+                        try {
+                            JSONObject error = new JSONObject(anError.getErrorBody());
+                            JSONObject data = error.getJSONObject("data");
+                            Toast.makeText(context, error.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (data.has("student_id")) {
+                                Toast.makeText(context, data.getJSONArray("student_id").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (data.has("password")) {
+                                Toast.makeText(context, data.getJSONArray("password").toString(), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-
                         }
-
                     }
+                });
+    }
+    private void editProfPass() {
+        mUpdateBtn.setEnabled(false);
+        pDialog.show();
 
+        String url = Urls.RESET_PASSWORD_PROFESSOR_URL;
+        String pass = mPassword.getText().toString().trim();
+
+        String profId = String.valueOf(SharedPrefManager.getInstance(context).getUserId());
+        AndroidNetworking.post(url)
+                .addBodyParameter("professor_id", profId)
+                .addBodyParameter("password", pass)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            //converting response to json object
+                            JSONObject obj = response;
+                            String message = obj.getString("message");
+                            String userFounded = "User founded";
+                            //if no error in response
+                            if (message.toLowerCase().contains(userFounded.toLowerCase())) {
+                                Toast.makeText(context, context.getResources().getString(R.string.password_edit), Toast.LENGTH_SHORT).show();
+                            }
+                            mUpdateBtn.setEnabled(true);
+                            pDialog.dismiss();
+                            navController.popBackStack();
+                        } catch (JSONException e) {
+                            mUpdateBtn.setEnabled(true);
+                            pDialog.dismiss();
+                            e.printStackTrace();
+                            Log.e("editprof catch", e.getMessage());
+                        }
+                    }
                     @Override
                     public void onError(ANError anError) {
-                        pDialog.dismiss();
                         mUpdateBtn.setEnabled(true);
-                        Toast.makeText(ctx, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        pDialog.dismiss();
+                        Log.e("editproferror", anError.getErrorBody());
+                        try {
+                            JSONObject error = new JSONObject(anError.getErrorBody());
+                            JSONObject data = error.getJSONObject("data");
+                            Toast.makeText(context, error.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (data.has("professor_id")) {
+                                Toast.makeText(context, data.getJSONArray("professor_id").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (data.has("password")) {
+                                Toast.makeText(context, data.getJSONArray("password").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }
@@ -155,12 +203,12 @@ public class EditPasswordFragment extends Fragment {
 
         //checking if username is empty
         if (TextUtils.isEmpty(pass) || TextUtils.isEmpty(confirmPass) ) {
-            Toast.makeText(ctx, getResources().getString(R.string.field_missing_message), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getResources().getString(R.string.field_missing_message), Toast.LENGTH_SHORT).show();
             mUpdateBtn.setEnabled(true);
             return false;
 
         }else if (!pass.equals(confirmPass)){
-            Toast.makeText(ctx, getResources().getString(R.string.password_not_same), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getResources().getString(R.string.password_not_same), Toast.LENGTH_SHORT).show();
             mUpdateBtn.setEnabled(true);
             return false;
         }

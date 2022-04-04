@@ -5,35 +5,33 @@ public class ProfessorQuestion {
     int id;
     int studentID;
     String studentName;
-    int professorId;
+    String title;
     String content;
     String answer;
     String date;
 
-    public ProfessorQuestion(int id, int studentID, String studentName, int professorId, String content, String answer) {
-        this.id = id;
-        this.studentID = studentID;
-        this.studentName = studentName;
-        this.professorId = professorId;
-        this.content = content;
-        this.answer = answer;
-    }
-    public ProfessorQuestion(int id, int studentID, int professorId, String content, String answer) {
-        this.id = id;
-        this.studentID = studentID;
-        this.professorId = professorId;
-        this.content = content;
-        this.answer = answer;
-    }
 
-    public ProfessorQuestion(int id, int studentID, String studentName, int professorId, String content, String answer, String date) {
+//    public ProfessorQuestion(int id, int studentID, int professorId, String content, String answer) {
+//        this.id = id;
+//        this.studentID = studentID;
+//        this.professorId = professorId;
+//        this.content = content;
+//        this.answer = answer;
+//    }
+
+
+    public ProfessorQuestion(int id, int studentID, String studentName, String title, String content, String answer, String date) {
         this.id = id;
         this.studentID = studentID;
         this.studentName = studentName;
-        this.professorId = professorId;
+        this.title = title;
         this.content = content;
         this.answer = answer;
         this.date = date;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public int getId() {
@@ -52,13 +50,7 @@ public class ProfessorQuestion {
         this.studentID = studentID;
     }
 
-    public int getProfessorId() {
-        return professorId;
-    }
 
-    public void setProfessorId(int professorId) {
-        this.professorId = professorId;
-    }
 
     public String getContent() {
         return content;

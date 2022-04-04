@@ -1,98 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_main"
+    android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
     tools:context=".student.fragments.CommunityFragment"
-    android:background="@color/bg_main" >
+    >
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/white"
-        >
-        <EditText
-            android:id="@+id/question_et"
-            android:layout_width="0dp"
-            android:layout_weight="10"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:textColorHint="@color/input_register_hint"
-            android:layout_marginStart="16dp"
-            android:hint="@string/post_new_question"
-            android:lines="3"
-            android:maxLines="3"/>
+        android:layout_height="match_parent"
+        android:background="@color/bg_main"
+        android:orientation="vertical"
+    >
 
-        <ImageView
-            android:id="@+id/question_btn"
-            android:layout_width="24dp"
-            android:layout_weight="0.5"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:tint="@color/black"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_forward" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
 
+            <EditText
+                android:id="@+id/question_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="10"
+                android:hint="@string/post_new_question"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:maxLines="3"
+                android:textColorHint="@color/input_register_hint" />
 
-    <RadioGroup
-        android:id="@+id/questions_type_selector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_post"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:padding="8dp"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/all"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:padding="14dp"
-            android:textSize="14sp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:checked="true"
-            android:textColor="@color/white"
-            android:background="@drawable/questions_type_btn_state_bg"
-            android:text="@string/all"/>
-
-        <RadioButton
-            android:id="@+id/common"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:layout_weight="1"
-            android:layout_marginStart="16dp"
-            android:padding="14dp"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:background="@drawable/questions_type_btn_state_bg"
-            android:text="@string/common_questions"/>
-
-    </RadioGroup>
+            <ImageView
+                android:id="@+id/question_btn"
+                android:layout_width="24dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.5"
+                android:src="@drawable/ic_forward"
+                android:tint="@color/black" />
+        </LinearLayout>
 
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+        <RadioGroup
+            android:id="@+id/questions_type_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_question"
-            android:orientation="vertical"/>
-    </androidx.core.widget.NestedScrollView>
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_post"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/all"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/questions_type_btn_state_bg"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/all"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/common"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/questions_type_btn_state_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="@string/common_questions"
+                android:textSize="14sp" />
+
+        </RadioGroup>
 
 
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_question" />
+        </androidx.core.widget.NestedScrollView>
+
+
+    </LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

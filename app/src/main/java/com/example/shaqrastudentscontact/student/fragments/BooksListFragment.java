@@ -3,17 +3,15 @@ package com.example.shaqrastudentscontact.student.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -22,15 +20,13 @@ import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.Book;
 import com.example.shaqrastudentscontact.student.adapters.BooksListAdapter;
 import com.example.shaqrastudentscontact.utils.Urls;
-
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class BooksListFragment extends Fragment {
 
-    Context ctx;
+    Context context;
     RecyclerView mList;
     BooksListAdapter mAdapter;
     ArrayList<Book> list;
@@ -39,18 +35,14 @@ public class BooksListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.ctx = context;
+        this.context = context;
     }
 
-    public BooksListFragment() {
-    }
-
-
+    public BooksListFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -63,65 +55,55 @@ public class BooksListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mList = view.findViewById(R.id.rv);
-
-        list = new ArrayList<Book>(){{
-            add(new Book(2, "https://drive.google.com/uc?export=download&id=1EB9rLzsYaPE2RxClP8OC5UfKa8lCrbog", "Course Book"));
-            add(new Book(2, "https://drive.google.com/uc?export=download&id=1wRNlnFMx2Ahlbp6EtOST0fI6g8f0-FjI", "Course Book"));
-            add(new Book(2, "https://drive.google.com/uc?export=download&id=1EB9rLzsYaPE2RxClP8OC5UfKa8lCrbog", "Course Book 1"));
-            add(new Book(2, "https://drive.google.com/uc?export=download&id=1wRNlnFMx2Ahlbp6EtOST0fI6g8f0-FjI", "Course Book 2"));
-        }};
-        mAdapter = new BooksListAdapter(ctx, list);
-
-        mList.setAdapter(mAdapter);
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Processing Please wait...");
+        pDialog.setCancelable(false);
+        getBooks();
     }
 
     private void getBooks(){
         String url = Urls.GET_BOOKS;
-        pDialog.setMessage("Processing Please wait...");
         pDialog.show();
-
-        AndroidNetworking.post(url).setPriority(Priority.MEDIUM)
+        list = new ArrayList<Book>();
+        AndroidNetworking.get(url)
+                .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
-                        pDialog.dismiss();
                         try {
-                            //converting response to json object
-                            JSONObject obj = response;
-                            //if no error in response
-                            if (obj.getInt("status") == 1) {
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("data");
-//                                User user;
-//                                SharedPrefManager.getInstance(getApplicationContext()).setUserType(Constants.USER);
-//                                user = new User(
-//                                        Integer.parseInt(userJson.getString("id")),
-//                                        userJson.getString("name"),
-//                                        "+966 "+userJson.getString("email")
-//                                );
-//
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//                                goToUserMainActivity();
-//                                finish();
-//
-//                                mRegisterBtn.setEnabled(true);
-//                            } else if(obj.getInt("status") == -1){
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                                mRegisterBtn.setEnabled(true);
+                            String messageGot = "founded";
+                            String message = response.getString("message");
+                            if (message.toLowerCase().contains(messageGot.toLowerCase())) {
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                                JSONArray jsonArray = response.getJSONArray("data");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    list.add(
+                                            new Book(
+                                                    Integer.parseInt(obj.getString("id")),
+                                                    obj.getString("url"),
+                                                    obj.getString("title")
+                                            )
+                                    );
+                                }
+                                mAdapter = new BooksListAdapter(context, list);
+                                mList.setAdapter(mAdapter);
+                            } else {
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                             }
-                        } catch (JSONException e) {
+                            pDialog.dismiss();
+                        } catch (Exception e) {
                             e.printStackTrace();
+                            pDialog.dismiss();
+                            Log.e("books catch", e.getMessage());
                         }
                     }
                     @Override
-                    public void onError(ANError anError) {
+                    public void onError(ANError error) {
                         pDialog.dismiss();
-                        Toast.makeText(ctx, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("books anerror", error.getErrorBody());
+                        Log.e("books anerror", error.getErrorDetail());
                     }
                 });
     }

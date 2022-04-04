@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class ProfessorsFragment extends Fragment {
 
     Context ctx;
-
+    ArrayList<Professor> list;
     RecyclerView mList;
     ProfessorsAdapter mAdapter;
 
@@ -74,7 +74,7 @@ public class ProfessorsFragment extends Fragment {
         mList = view.findViewById(R.id.rv);
 
 
-        ArrayList<Professor> list = new ArrayList<Professor>() {
+        list = new ArrayList<Professor>() {
             {
                add(new Professor(1, "prof", "information technology","MAth","@prof"));
                add(new Professor(1, "prof", "information technology","MAth","@prof"));

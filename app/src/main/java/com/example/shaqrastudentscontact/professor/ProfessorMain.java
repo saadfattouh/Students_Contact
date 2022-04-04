@@ -10,11 +10,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.activities.Login;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.google.android.material.navigation.NavigationView;
 
@@ -58,7 +60,7 @@ public class ProfessorMain extends AppCompatActivity implements DrawerLayout.Dra
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.menu_requested_questions, R.id.scheduleFreeTime, R.id.profile).setOpenableLayout(drawerLayout).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.menu_requested_questions, R.id.menu_update_schedule, R.id.menu_prof_profile).setOpenableLayout(drawerLayout).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
@@ -99,12 +101,18 @@ public class ProfessorMain extends AppCompatActivity implements DrawerLayout.Dra
                 destination = R.id.menu_requested_questions;
                 break;
 
-            case R.id.update_schedule:
-                destination = R.id.scheduleFreeTime;
+            case R.id.menu_update_schedule:
+                destination = R.id.menu_update_schedule;
                 break;
 
-            case R.id.professor_profile:
-                destination = R.id.profile;
+            case R.id.menu_prof_profile:
+                destination = R.id.menu_prof_profile;
+                break;
+
+            case R.id.menu_logout:
+                SharedPrefManager.getInstance(this).logout();
+                startActivity(new Intent(this, Login.class));
+                finish();
                 break;
         }
 

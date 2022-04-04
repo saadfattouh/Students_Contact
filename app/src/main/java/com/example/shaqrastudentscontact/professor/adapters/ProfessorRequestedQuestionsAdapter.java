@@ -50,7 +50,6 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
 
         ProfessorQuestion question = list.get(position);
 
-
         holder.studentName.setText(question.getStudentName());
         holder.question.setText(question.getContent());
         holder.date.setText(question.getDate());
@@ -85,14 +84,10 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
                 }else {
                     reply.setText(context.getResources().getString(R.string.no_answer_yet));
                 }
-
                 questionReplyDialog.show();
             }
         });
-
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -111,9 +106,7 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
             this.date = itemView.findViewById(R.id.date);
             this.addReply = itemView.findViewById(R.id.reply);
             this.replies = itemView.findViewById(R.id.replies);
-
         }
     }
-
 
 }

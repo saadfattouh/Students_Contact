@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.activities.Login;
 import com.example.shaqrastudentscontact.utils.Constants;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.google.android.material.navigation.NavigationView;
@@ -17,6 +19,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -43,9 +46,11 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
 
+        Log.e("dept", SharedPrefManager.getInstance(this).getSelectedDept() + "");
         accountType = Constants.STUDENT_TYPE_HONOR;
 
         setupNavigation(accountType);
+
     }
 
     private void setupNavigation(int accountType) {
@@ -141,14 +146,15 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
                 destination = R.id.menu_student_profile;
 
                 break;
-            case R.id.menu_logout:
-                SharedPrefManager sharedPrefManager = new SharedPrefManager(this);
-                sharedPrefManager.logout();
-                break;
-
             //for honor student
             case R.id.menu_requested_questions:
                 destination = R.id.menu_requested_questions;
+                break;
+
+            case R.id.menu_logout:
+                SharedPrefManager.getInstance(this).logout();
+                startActivity(new Intent(this, Login.class));
+                finish();
                 break;
         }
 
@@ -159,14 +165,10 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
 
 
     @Override
-    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-    }
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
 
     @Override
-    public void onDrawerOpened(@NonNull View drawerView) {
-
-    }
+    public void onDrawerOpened(@NonNull View drawerView) {}
 
     @Override
     public void onDrawerClosed(@NonNull View drawerView) {
@@ -174,7 +176,5 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
     }
 
     @Override
-    public void onDrawerStateChanged(int newState) {
-
-    }
+    public void onDrawerStateChanged(int newState) {}
 }

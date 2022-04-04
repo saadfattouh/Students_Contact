@@ -20,6 +20,8 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.utils.Constants;
+import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.example.shaqrastudentscontact.utils.Urls;
 import com.example.shaqrastudentscontact.utils.Validation;
 
@@ -28,7 +30,7 @@ import org.json.JSONObject;
 
 public class AskProfessorFragment extends Fragment {
 
-    EditText mTitleEt, mDetailsEt;
+    EditText mTitleET, mContentET;
     Button mSendBtn;
 
     String  professor_id;
@@ -52,7 +54,7 @@ public class AskProfessorFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            professor_id = getArguments().getString("prof_id");
+            professor_id = getArguments().getString(Constants.PROFESSOR_KEY);
         }
     }
 
@@ -67,28 +69,29 @@ public class AskProfessorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mTitleEt = view.findViewById(R.id.title);
-        mDetailsEt = view.findViewById(R.id.details);
+        mTitleET = view.findViewById(R.id.title);
+        mContentET = view.findViewById(R.id.details);
         mSendBtn = view.findViewById(R.id.send_btn);
 
         mSendBtn.setOnClickListener(v -> {
-            if(Validation.validateInput(ctx, mTitleEt, mDetailsEt)){
-                String title = mTitleEt.getText().toString();
-                String details = mDetailsEt.getText().toString();
-                sendQuestion(title, details, professor_id);
+            if(Validation.validateInput(ctx, mContentET)){
+                String title = mTitleET.getText().toString();
+                String content = mContentET.getText().toString();
+                sendQuestion(title, content, professor_id);
             }
         });
     }
 
     //todo api call (must get student id before sending
-    private void sendQuestion(String title, String details, String professor_id) {
+    private void sendQuestion(String title, String content, String professor_id) {
         String url = Urls.SEND_QUESTION_TO_PROF;
         pDialog.setMessage("Processing Please wait...");
         pDialog.show();
 
         AndroidNetworking.post(url).setPriority(Priority.MEDIUM)
+                .addBodyParameter("student_id", String.valueOf(SharedPrefManager.getInstance(ctx).getUserId()))
                 .addBodyParameter("title",title)
-                .addBodyParameter("details",details)
+                .addBodyParameter("content",content)
                 .addBodyParameter("prof_id", professor_id)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {

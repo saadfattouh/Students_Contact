@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
+    android:background="@color/colorAccent"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".activities.UpdateProfile">
+    tools:context=".activities.Login">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -19,40 +18,34 @@
         android:paddingRight="20dp" >
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/code"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="@string/hint_password"
-            android:inputType="phone"
+            android:background="@color/white"
+            android:hint="@string/hint_verification_code"
+            android:inputType="textPassword"
             android:padding="10dp"
             android:singleLine="true"
-            android:background="@color/white"
             android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint"  />
+            android:textColorHint="@color/input_login_hint" />
 
-        <EditText
-            android:id="@+id/confirm_password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:hint="@string/confirm_pass"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:background="@color/white"
-            android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint"  />
 
 
         <!-- Login Button -->
+
         <Button
-            android:id="@+id/btn_update"
+            android:id="@+id/btn_verify_code"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
             android:layout_marginTop="20dip"
-            android:text="@string/update"
+            android:text="@string/btn_verify"
             android:background="@color/colorPrimaryDark"
-            android:textColor="@color/white"/>
+            android:textColor="@android:color/white" />
+
+        <!-- Link to Login Screen -->
 
 
     </LinearLayout>

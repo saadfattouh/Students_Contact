@@ -66,6 +66,7 @@
                 android:checked="true"
                 android:layout_alignParentEnd="true"
                 android:gravity="center_vertical"
+                android:enabled="false"
                 />
         </RelativeLayout>
 

@@ -3,14 +3,11 @@ package com.example.shaqrastudentscontact.student.fragments;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -24,7 +21,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -87,17 +83,15 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
     //controls showing and hiding bottom menu
     OnTapListener onTapListener;
     private boolean tapped = false;
-    Context ctx;
+    Context context;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.ctx = context;
+        this.context = context;
     }
 
-    public BookViewFragment() {
-        // Required empty public constructor
-    }
+    public BookViewFragment() {}
 
 
     @Override
@@ -123,15 +117,14 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         bottomNav = view.findViewById(R.id.bottom_navigation_bookView);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        prefManager = SharedPrefManager.getInstance(ctx);
+        prefManager = SharedPrefManager.getInstance(context);
 
         //if the pdf is large or not downloaded so it will take time to load
         pdfView = view.findViewById(R.id.pdfView);
-        progressDialog = new ProgressDialog(ctx);
+        progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Please wait\nFetching pdf...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -151,7 +144,7 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
             }
         };
 
-        FileLoader.with(ctx)
+        FileLoader.with(context)
                 .load(url, false) //2nd parameter is optioal, pass true to force load from network
                 .fromDirectory("lectures/" + bookName, FileLoader.DIR_INTERNAL)
                 .asFile(new FileRequestListener<File>() {
@@ -181,7 +174,7 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
                                     .enableAnnotationRendering(true)
                                     .onLoad(BookViewFragment.this)
                                     .onPageChange(BookViewFragment.this)
-                                    .scrollHandle(new DefaultScrollHandle(ctx))
+                                    .scrollHandle(new DefaultScrollHandle(context))
                                     .enableDoubletap(true)
                                     .onPageError(BookViewFragment.this)
                                     .swipeHorizontal(true)
@@ -203,7 +196,7 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
                     @Override
                     public void onError(FileLoadRequest request, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(ctx, "" + t.getMessage() + ", File Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "" + t.getMessage() + ", File Error", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -285,7 +278,7 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
             cs.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
-            mp = MediaPlayer.create(ctx, R.raw.camerashutter);
+            mp = MediaPlayer.create(context, R.raw.camerashutter);
             mp.start();
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -294,7 +287,7 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
                 }
             });
             //for gallery to be notified of the Image
-            MediaScannerConnection.scanFile(ctx, new String[]{file.getAbsolutePath()},
+            MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()},
                     null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
@@ -303,12 +296,12 @@ public class BookViewFragment extends Fragment implements OnLoadCompleteListener
                         }
                     });
             //todo add string resource for locals
-            Toast.makeText(ctx, "screenshot saved to gallery", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "screenshot saved to gallery", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
             e.printStackTrace();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ctx.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                         PackageManager.PERMISSION_DENIED) {
                     String[] permission = {
                             Manifest.permission.WRITE_EXTERNAL_STORAGE

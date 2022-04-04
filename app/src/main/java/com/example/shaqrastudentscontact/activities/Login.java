@@ -19,14 +19,12 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.models.Professor;
 import com.example.shaqrastudentscontact.models.Student;
-import com.example.shaqrastudentscontact.student.StudentMain;
 import com.example.shaqrastudentscontact.utils.Constants;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.professor.ProfessorMain;
-import com.example.shaqrastudentscontact.student.ChooseDepartment;
+import com.example.shaqrastudentscontact.student.ChooseDepartmentActivity;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.example.shaqrastudentscontact.utils.Urls;
-import com.example.shaqrastudentscontact.utils.Validation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,13 +32,13 @@ import org.json.JSONObject;
 
 public class Login extends AppCompatActivity {
 
-    private Button mLoginBtn;
+    private Button mLoginBtn, mToRegisterBtn;
     private EditText mEmailET;
     private EditText mPassET;
     private ProgressDialog pDialog;
 
     RadioGroup mAccountTypeSelector;
-    int selectedUserType = -1;
+    int selectedUserType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,59 +48,20 @@ public class Login extends AppCompatActivity {
         mEmailET = findViewById(R.id.email);
         mPassET =  findViewById(R.id.password);
         mLoginBtn =  findViewById(R.id.btnLogin);
+        mToRegisterBtn =  findViewById(R.id.btnLinkToRegisterScreen);
         mAccountTypeSelector = findViewById(R.id.type_selector);
 
+        mAccountTypeSelector.check(R.id.student);
+        selectedUserType = Constants.USER_TYPE_STUDENT;
         // Progress dialog
         pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Processing Please wait...");
         pDialog.setCancelable(false);
 
-        // Login button Click Event
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-
-                mLoginBtn.setEnabled(false);
-
-                //validation
-                String email = mEmailET.getText().toString().trim();
-                String password = mPassET.getText().toString().trim();
-
-                // Check for empty data in the form
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    if(selectedUserType == -1){
-                        Toast.makeText(Login.this, getResources().getString(R.string.type_missing_message), Toast.LENGTH_SHORT).show();
-                        mLoginBtn.setEnabled(true);
-                        return;
-                    }else {
-                        if(selectedUserType == Constants.USER_TYPE_PROFESSOR){
-                            if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
-                                    Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
-                                    mLoginBtn.setEnabled(true);
-                                    return ;
-                            }else {
-                                // login professor
-                                loginProfessor(email, password);
-                            }
-                        }else if(selectedUserType == Constants.USER_TYPE_STUDENT){
-                            if(!email.contains(getResources().getString(R.string.student_email_suffex))){
-                                Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
-                                mLoginBtn.setEnabled(true);
-                                return;
-                            }else {
-                                // login student
-                                loginStudent(email, password);
-                            }
-                        }
-                    }
-                } else {
-                    // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            getResources().getString(R.string.email_and_password_required), Toast.LENGTH_LONG)
-                            .show();
-                }
-            }
+        mToRegisterBtn.setOnClickListener(v->{
+            startActivity(new Intent(this, Register.class));
+            finish();
         });
-
         mAccountTypeSelector.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId){
                 case R.id.student:
@@ -113,21 +72,50 @@ public class Login extends AppCompatActivity {
                     break;
             }
         });
+        mLoginBtn.setOnClickListener(view -> {
 
+            mLoginBtn.setEnabled(false);
 
+            //validation
+            String email = mEmailET.getText().toString().trim();
+            String password = mPassET.getText().toString().trim();
 
-
+            // Check for empty data in the form
+            if (!email.isEmpty() && !password.isEmpty()) {
+                if(selectedUserType == -1){
+                    Toast.makeText(Login.this, getResources().getString(R.string.type_missing_message), Toast.LENGTH_SHORT).show();
+                    mLoginBtn.setEnabled(true);
+                    return;
+                }else {
+                    if(selectedUserType == Constants.USER_TYPE_PROFESSOR){
+                        if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
+                                Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
+                                mLoginBtn.setEnabled(true);
+                                return ;
+                        }else {
+                            loginUser(email, password);
+                        }
+                    }else if(selectedUserType == Constants.USER_TYPE_STUDENT){
+                        if(email.contains(getResources().getString(R.string.student_email_suffex))){//TODO !
+                            Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
+                            mLoginBtn.setEnabled(true);
+                            return;
+                        }else {
+                            loginUser(email, password);
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        getResources().getString(R.string.email_and_password_required), Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
     }
-
-    private void loginStudent(String email, String password) {
-        startActivity(new Intent(this, ChooseDepartment.class));
-        finish();
-
-        pDialog.setMessage("Processing Please wait...");
+    private void loginUser(String email, String password) {
         pDialog.show();
 
-        String url = Urls.LOGIN_USER_URL;
-
+        String url = Urls.LOGIN_URL;
         AndroidNetworking.post(url)
                 .addBodyParameter("email", email)
                 .addBodyParameter("password", password)
@@ -136,128 +124,77 @@ public class Login extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
-                        pDialog.dismiss();
-
                         try {
                             //converting response to json object
                             JSONObject obj = response;
+                            String message = obj.getString("message");
+                            String userFounded = "User founded";
                             //if no error in response
-                            if (obj.getInt("status") == 1) {
-
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                                //getting the user from the response
-                                JSONObject userJson = obj.getJSONObject("data");
-                                Student user;
-                                user = new Student(
-                                        Integer.parseInt(
-                                        userJson.getString("id")),
-                                        userJson.getString("name"),
-                                        userJson.getString("email"),
-                                        Integer.parseInt(userJson.getString("type"))
-
-                                );
-
-                                //storing the user in shared preferences
-                                SharedPrefManager.getInstance(getApplicationContext()).studentLogin(user);
-                                goToUserMainActivity();
-                                finish();
-
-                                mLoginBtn.setEnabled(true);
-                            } else if(obj.getInt("status") == -1){
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                                mLoginBtn.setEnabled(true);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e("login student", e.getMessage());
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        pDialog.dismiss();
-                        mLoginBtn.setEnabled(true);
-                        Toast.makeText(Login.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("login student", anError.getMessage());
-
-                    }
-                });
-
-
-    }
-
-    private void goToUserMainActivity() {
-        startActivity(new Intent(Login.this, StudentMain.class));
-        finish();
-    }
-    private void goToProfMainActivity() {
-        startActivity(new Intent(Login.this, ProfessorMain.class));
-        finish();
-    }
-    private void loginProfessor(String email, String password) {
-        pDialog.setMessage("Processing Please wait...");
-        pDialog.show();
-
-        String url = Urls.LOGIN_PROF_URL;
-
-        AndroidNetworking.post(url)
-                .addBodyParameter("email", email)
-                .addBodyParameter("password", password)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        pDialog.dismiss();
-
-                        try {
-                            //converting response to json object
-                            JSONObject obj = response;
-                            //if no error in response
-                            if (obj.getInt("status") == 1) {
-
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (message.toLowerCase().contains(userFounded.toLowerCase())) {
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                                 //getting the user from the response
                                 JSONObject userJson = obj.getJSONObject("data");
-                                Professor user;
-                                user = new Professor(
-                                        Integer.parseInt(userJson.getString("id")),
-                                        userJson.getString("name"),
-                                        userJson.getString("deptName"),
-                                        userJson.getString("email"),
-                                        userJson.getString("specialization")
-                                );
+                                int userType = userJson.getInt("type");
 
-                                //storing the user in shared preferences
-                                SharedPrefManager.getInstance(getApplicationContext()).professorLogin(user);
-                                goToUserMainActivity();
+                                Log.e("uType", userType+"");
+                                if(userType == Constants.USER_TYPE_STUDENT){
+                                    Student student;
+                                    student = new Student(
+                                            Integer.parseInt(userJson.getString("id")),
+                                            userJson.getString("name"),
+                                            userJson.getString("email"),
+                                            userJson.getInt("type"));
+                                            SharedPrefManager.getInstance(getApplicationContext()).studentLogin(student);
+                                    Intent i = new Intent(Login.this, ChooseDepartmentActivity.class);
+                                    i.putExtra(Constants.FROM, Constants.USER_TYPE_STUDENT);
+                                    startActivity(i);
+                                }else{
+                                    Professor professor;
+
+                                    professor = new Professor(
+                                            Integer.parseInt(userJson.getString("id")),
+                                            userJson.getString("name"),
+                                            "dept",
+                                            userJson.getString("specialization"),
+                                            userJson.getString("email"));
+                                            SharedPrefManager.getInstance(getApplicationContext()).professorLogin(professor);
+                                    startActivity(new Intent(Login.this, ProfessorMain.class));
+                                }
                                 finish();
-
-                                mLoginBtn.setEnabled(true);
-                            } else if(obj.getInt("status") == -1){
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                                mLoginBtn.setEnabled(true);
+                            }else{
+                                Toast.makeText(Login.this, getResources().getString(R.string.wrong_pass), Toast.LENGTH_SHORT).show();
                             }
+                            pDialog.dismiss();
+                            mLoginBtn.setEnabled(true);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("login prof", e.getMessage());
+                            Log.e("regprof catch", e.getMessage());
+                            pDialog.dismiss();
+                            mLoginBtn.setEnabled(true);
+
                         }
                     }
                     @Override
                     public void onError(ANError anError) {
                         pDialog.dismiss();
                         mLoginBtn.setEnabled(true);
-                        Toast.makeText(Login.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("login prof", anError.getMessage());
 
+                        Log.e("regiproferror", anError.getErrorBody());
+                        try {
+                            JSONObject error = new JSONObject(anError.getErrorBody());
+                            JSONObject data = error.getJSONObject("data");
+                            Toast.makeText(Login.this, error.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (data.has("email")) {
+                                Toast.makeText(getApplicationContext(), data.getJSONArray("email").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (data.has("password")) {
+                                Toast.makeText(getApplicationContext(), data.getJSONArray("password").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
-
     }
-
 }

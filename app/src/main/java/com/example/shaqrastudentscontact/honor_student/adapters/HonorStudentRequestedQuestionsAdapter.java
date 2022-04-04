@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,6 +55,7 @@ public class HonorStudentRequestedQuestionsAdapter extends RecyclerView.Adapter<
         holder.question.setText(question.getContent());
         holder.date.setText(question.getDate());
 
+        holder.isReplied.setChecked(!question.getAnswer().isEmpty());
         holder.addReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +102,7 @@ public class HonorStudentRequestedQuestionsAdapter extends RecyclerView.Adapter<
 
         public TextView studentName, question, date, replies, addReply;
 
+        public CheckBox isReplied;
         public ViewHolder(View itemView) {
             super(itemView);
             this.studentName = itemView.findViewById(R.id.name);
@@ -107,6 +110,7 @@ public class HonorStudentRequestedQuestionsAdapter extends RecyclerView.Adapter<
             this.date = itemView.findViewById(R.id.date);
             this.addReply = itemView.findViewById(R.id.reply);
             this.replies = itemView.findViewById(R.id.replies);
+            this.isReplied = itemView.findViewById(R.id.is_replied);
 
         }
     }

@@ -1,4 +1,4 @@
-package com.example.shaqrastudentscontact.professor.fragments;
+package com.example.shaqrastudentscontact.student.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,51 +14,58 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.shaqrastudentscontact.R;
-import com.example.shaqrastudentscontact.models.ProfessorQuestion;
-import com.example.shaqrastudentscontact.models.Question;
-import com.example.shaqrastudentscontact.professor.adapters.ProfessorRequestedQuestionsAdapter;
+import com.example.shaqrastudentscontact.models.Professor;
+import com.example.shaqrastudentscontact.models.Student;
+import com.example.shaqrastudentscontact.student.adapters.HonorStudentsAdapter;
+import com.example.shaqrastudentscontact.student.adapters.ProfessorsAdapter;
 
 import java.util.ArrayList;
 
+public class HonorStudentsFragment extends Fragment {
 
-public class ProfessorRequestedQuestionsFragment extends Fragment {
+    ArrayList<Student> list;
+    RecyclerView mList;
+    HonorStudentsAdapter mAdapter;
+    private ProgressDialog pDialog;
 
     Context ctx;
-    RecyclerView mList;
-    ArrayList<ProfessorQuestion> list;
-    ProfessorRequestedQuestionsAdapter adapter;
-    ProgressDialog pDialog;
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.ctx = context;
     }
 
-    public ProfessorRequestedQuestionsFragment() {
+    public HonorStudentsFragment() {
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_professor_requested_questions, container, false);
+        return inflater.inflate(R.layout.fragment_student_honor_students, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mList = view.findViewById(R.id.rv);
-        list = new ArrayList<ProfessorQuestion>(){{
-            add(new ProfessorQuestion(1, 1, "tahani", "Questio about soething", "wht is ?", "new", "19-3-2022"));
-        }};
-        adapter = new ProfessorRequestedQuestionsAdapter(ctx, list);
-        mList.setAdapter(adapter);
 
 
+        list = new ArrayList<Student>() {
+            {
+                add(new Student(1, "student", "student@",1));
+
+            }
+
+        };
+        mAdapter = new HonorStudentsAdapter(ctx, list);
+
+        mList.setAdapter(mAdapter);
     }
 }

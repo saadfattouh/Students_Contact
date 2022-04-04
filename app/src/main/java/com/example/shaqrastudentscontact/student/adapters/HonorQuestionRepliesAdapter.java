@@ -12,21 +12,22 @@ import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.models.HonorStudentQuestion;
 import com.example.shaqrastudentscontact.models.ProfessorQuestion;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionRepliesAdapter extends RecyclerView.Adapter<QuestionRepliesAdapter.ViewHolder>{
+public class HonorQuestionRepliesAdapter  extends RecyclerView.Adapter<HonorQuestionRepliesAdapter.ViewHolder>{
 
 
     Context context;
-    private List<ProfessorQuestion> list;
+    private List<HonorStudentQuestion> list;
     public NavController navController;
 
 
     // RecyclerView recyclerView;
-    public QuestionRepliesAdapter(Context context, ArrayList<ProfessorQuestion> list) {
+    public HonorQuestionRepliesAdapter(Context context, ArrayList<HonorStudentQuestion> list) {
         this.context = context;
         this.list = list;
     }
@@ -34,21 +35,21 @@ public class QuestionRepliesAdapter extends RecyclerView.Adapter<QuestionReplies
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HonorQuestionRepliesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.item_question_professor, parent, false);
-        ViewHolder viewHolder = new ViewHolder(listItem);
+        HonorQuestionRepliesAdapter.ViewHolder viewHolder = new HonorQuestionRepliesAdapter.ViewHolder(listItem);
 
         return viewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HonorQuestionRepliesAdapter.ViewHolder holder, int position) {
 
-        ProfessorQuestion question = list.get(position);
+        HonorStudentQuestion question = list.get(position);
 
-        holder.title.setText(question.getStudentName());
+        holder.title.setText(question.getTitle());
         holder.details.setText(question.getContent());
 
         holder.itemView.setOnClickListener(v -> {
@@ -62,7 +63,7 @@ public class QuestionRepliesAdapter extends RecyclerView.Adapter<QuestionReplies
             TextView details = view.findViewById(R.id.question);
             TextView reply = view.findViewById(R.id.answer);
 
-            title.setText(question.getStudentName());
+            title.setText(question.getTitle());
             details.setText(question.getContent());
             if(question.getAnswer() != null || question.getAnswer().isEmpty()){
                 reply.setText(question.getAnswer());
@@ -71,7 +72,7 @@ public class QuestionRepliesAdapter extends RecyclerView.Adapter<QuestionReplies
             }
 
             questionReplyDialog.show();
-    });
+        });
 
 
 

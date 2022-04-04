@@ -23,7 +23,8 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.ProfessorQuestion;
-import com.example.shaqrastudentscontact.student.adapters.QuestionRepliesAdapter;
+import com.example.shaqrastudentscontact.student.adapters.ProfQuestionRepliesAdapter;
+import com.example.shaqrastudentscontact.utils.Constants;
 import com.example.shaqrastudentscontact.utils.Urls;
 
 import org.json.JSONException;
@@ -36,14 +37,15 @@ public class ProfessorDetailsFragment extends Fragment {
     Context ctx;
 
     TextView askBtn;
-
+    TextView mName, mEmail , mStartFreeTime, mEndFreeTime;
     String professorId;
+    String profName, profEmail, profStartFreeTime, profEndFreeTime;
 
     NavController navController;
 
 
     RecyclerView mQuestionsList;
-    QuestionRepliesAdapter mAdapter;
+    ProfQuestionRepliesAdapter mAdapter;
     ArrayList<ProfessorQuestion> questions;
     ProgressDialog pDialog;
 
@@ -62,7 +64,11 @@ public class ProfessorDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
-            professorId = getArguments().getString("prof_id", null);
+            professorId = getArguments().getString(Constants.PROFESSOR_KEY, null);
+            profName = getArguments().getString(Constants.PROFESSOR_NAME, null);
+            profEmail = getArguments().getString(Constants.PROFESSOR_EMAIL, null);
+            profStartFreeTime = getArguments().getString(Constants.PROFESSOR_FREE_TIME_START, null);
+            profEndFreeTime = getArguments().getString(Constants.PROFESSOR_FREE_TIME_END, null);
         }
 
     }
@@ -79,32 +85,41 @@ public class ProfessorDetailsFragment extends Fragment {
 
         askBtn = view.findViewById(R.id.ask_btn);
         mQuestionsList = view.findViewById(R.id.rv);
+        mName = view.findViewById(R.id.name);
+        mEmail = view.findViewById(R.id.email);
+        mStartFreeTime = view.findViewById(R.id.from);
+        mEndFreeTime = view.findViewById(R.id.to);
+
+        mName.setText(profName);
+        mEmail.setText(profEmail);
+        mStartFreeTime.setText(profStartFreeTime);
+        mEndFreeTime.setText(profEndFreeTime);
+
 
         askBtn.setOnClickListener(v -> {
 
             navController = Navigation.findNavController(view);
             Bundle bundle = new Bundle();
-            bundle.putString("prof_id", professorId);
+            bundle.putString(Constants.PROFESSOR_KEY, professorId);
             navController.navigate(R.id.action_profDetailsFragment_to_askProfessorFragment, bundle);
 
         });
 
         questions = new ArrayList<ProfessorQuestion>()
         {{
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
-            add(new ProfessorQuestion(1, 2, 3, "how to solve (1+1) equation in physics ?", "no comment !"));
+            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
+            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
 
         }};
 
-        mAdapter = new QuestionRepliesAdapter(ctx, questions);
+        mAdapter = new ProfQuestionRepliesAdapter(ctx, questions);
         mQuestionsList.setAdapter(mAdapter);
 
     }

@@ -1,112 +1,111 @@
-package com.example.shaqrastudentscontact.activities;
+package com.example.shaqrastudentscontact.student.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.utils.Constants;
+import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.example.shaqrastudentscontact.utils.Urls;
+import com.example.shaqrastudentscontact.utils.Validation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UpdateProfile extends AppCompatActivity {
+public class askHonorStudentFragment extends Fragment {
 
-    EditText mPassword;
-    EditText mConfirmPassword;
+    EditText mTitleET, mContentET;
+    Button mSendBtn;
 
-    Button mUpdateBtn;
+    String honorId;
 
-    private ProgressDialog pDialog;
+    Context ctx;
+    ProgressDialog pDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.ctx = context;
+    }
+
+    public askHonorStudentFragment() {
+        // Required empty public constructor
+
+    }
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_profile);
-
-
-        bindViews();
-
-        // Progress dialog
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
-
-
-        mUpdateBtn.setOnClickListener(v -> {
-            if(validateUserInput()){
-                mUpdateBtn.setEnabled(false);
-                register();
-            }
-        });
-
-
-    }
-
-
-    private void bindViews() {
-        mPassword = findViewById(R.id.password);
-        mConfirmPassword = findViewById(R.id.confirm_password);
-        mUpdateBtn = findViewById(R.id.btn_update);
-    }
-
-    private boolean validateUserInput() {
-
-        //first getting the values
-        final String pass = mPassword.getText().toString();
-        final String confirmPass = mConfirmPassword.getText().toString();
-
-
-        //checking if username is empty
-        if (TextUtils.isEmpty(pass) || TextUtils.isEmpty(confirmPass) ) {
-            Toast.makeText(this, getResources().getString(R.string.field_missing_message), Toast.LENGTH_SHORT).show();
-            mUpdateBtn.setEnabled(true);
-            return false;
-
-        }else if (!pass.equals(confirmPass)){
-            Toast.makeText(this, getResources().getString(R.string.password_not_same), Toast.LENGTH_SHORT).show();
-            mUpdateBtn.setEnabled(true);
-            return false;
+        if (getArguments() != null) {
+            honorId = getArguments().getString(Constants.HONOR_STUDENT_KEY);
         }
 
-        return true;
     }
 
-    private void register() {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_ask_honor_student, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mTitleET = view.findViewById(R.id.title);
+        mContentET = view.findViewById(R.id.details);
+        mSendBtn = view.findViewById(R.id.send_btn);
+
+        mSendBtn.setOnClickListener(v -> {
+            if(Validation.validateInput(ctx, mContentET)){
+                String title = mTitleET.getText().toString();
+                String content = mContentET.getText().toString();
+                sendQuestion(title, content, honorId);
+            }
+        });
+    }
+
+    private void sendQuestion(String title, String content, String honorId) {
+
+        String url = Urls.SEND_QUESTION_TO_PROF;
         pDialog.setMessage("Processing Please wait...");
         pDialog.show();
 
-        //first getting the values
-        final String pass = mPassword.getText().toString();
-
-        String url = Urls.BASE_URL + Urls.REGISTER_URL;
-
-        AndroidNetworking.post(url)
-                .addBodyParameter("password", pass)
-
-                .setPriority(Priority.MEDIUM)
+        AndroidNetworking.post(url).setPriority(Priority.MEDIUM)
+                .addBodyParameter("student_id", String.valueOf(SharedPrefManager.getInstance(ctx).getUserId()))
+                .addBodyParameter("title",title)
+                .addBodyParameter("content",content)
+                .addBodyParameter("honor_id", honorId)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // do anything with response
                         pDialog.dismiss();
-
                         try {
                             //converting response to json object
                             JSONObject obj = response;
-
                             //if no error in response
                             if (obj.getInt("status") == 1) {
-
 //                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 //
 //                                //getting the user from the response
@@ -116,7 +115,7 @@ public class UpdateProfile extends AppCompatActivity {
 //                                user = new User(
 //                                        Integer.parseInt(userJson.getString("id")),
 //                                        userJson.getString("name"),
-//                                        "+966 "+userJson.getString("phone")
+//                                        "+966 "+userJson.getString("email")
 //                                );
 //
 //                                //storing the user in shared preferences
@@ -131,16 +130,12 @@ public class UpdateProfile extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-
                         }
-
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         pDialog.dismiss();
-                        mUpdateBtn.setEnabled(true);
-                        Toast.makeText(UpdateProfile.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, anError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

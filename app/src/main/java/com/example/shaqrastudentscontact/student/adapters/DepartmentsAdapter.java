@@ -22,12 +22,15 @@ public class DepartmentsAdapter extends RecyclerView.Adapter<DepartmentsAdapter.
 
 
     Context context;
+
     private List<Department> depts;
+    private final  OnItemClickListener listener;
 
     // RecyclerView recyclerView;
-    public DepartmentsAdapter(Context context, ArrayList<Department> depts) {
+    public DepartmentsAdapter(Context context, ArrayList<Department> depts, OnItemClickListener listener) {
         this.context = context;
         this.depts = depts;
+        this.listener = listener;
     }
 
     @NonNull
@@ -49,8 +52,9 @@ public class DepartmentsAdapter extends RecyclerView.Adapter<DepartmentsAdapter.
         holder.dept.setText(dept.getDeptName());
 
         holder.dept.setOnClickListener(v -> {
-            SharedPrefManager.getInstance(context).setSelectedDept(dept.getId());
-            context.startActivity(new Intent(context, StudentMain.class));
+
+            listener.onItemClick(dept);
+
         });
 
 
@@ -73,5 +77,7 @@ public class DepartmentsAdapter extends RecyclerView.Adapter<DepartmentsAdapter.
         }
     }
 
-
+    public interface OnItemClickListener {
+        void onItemClick(Department item);
+    }
 }

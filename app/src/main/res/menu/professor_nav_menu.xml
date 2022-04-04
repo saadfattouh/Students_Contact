@@ -7,13 +7,19 @@
         android:title="@string/students_questions" />
 
     <item
-        android:id="@+id/update_schedule"
+        android:id="@+id/menu_update_schedule"
         android:icon="@drawable/ic_schedule"
         android:title="@string/set_free_time_schedule" />
 
     <item
-        android:id="@+id/professor_profile"
+        android:id="@+id/menu_prof_profile"
         android:icon="@drawable/ic_profile"
         android:title="@string/profile" />
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout"
+        android:actionLayout="@layout/fragment_student_profile"
+        />
 
 </menu>

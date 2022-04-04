@@ -3,21 +3,27 @@ package com.example.shaqrastudentscontact.models;
 public class HonorStudentQuestion {
 
     int id;
-    int askerId;
+    int studentId;
     String studentName;
     int honorId;
+    String title;
     String content;
     String answer;
     String date;
 
-    public HonorStudentQuestion(int id, int askerId, String studentName, int honorId, String content, String answer, String date) {
+    public HonorStudentQuestion(int id, int studentId, String studentName, int honorId, String title, String content, String answer, String date) {
         this.id = id;
-        this.askerId = askerId;
+        this.studentId = studentId;
         this.studentName = studentName;
         this.honorId = honorId;
+        this.title = title;
         this.content = content;
         this.answer = answer;
         this.date = date;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public int getId() {
@@ -28,12 +34,12 @@ public class HonorStudentQuestion {
         this.id = id;
     }
 
-    public int getAskerId() {
-        return askerId;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setAskerId(int askerId) {
-        this.askerId = askerId;
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
     public String getStudentName() {

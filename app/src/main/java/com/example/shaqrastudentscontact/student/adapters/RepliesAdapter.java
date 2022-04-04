@@ -25,7 +25,6 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.ViewHold
 
     Context context;
     private List<Reply> list;
-    public NavController navController;
 
 
     // RecyclerView recyclerView;

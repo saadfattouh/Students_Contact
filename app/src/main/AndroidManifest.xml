@@ -5,27 +5,32 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/shaqra_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".professor.ProfessorMain"></activity>
-        <activity android:name=".student.ChooseDepartment" />
+        <activity android:name=".professor.ProfessorMain" />
+        <activity android:name=".student.ChooseDepartmentActivity" />
         <activity android:name=".activities.Splash">
-
-        </activity>
-        <activity android:name=".activities.UpdateProfile" />
-        <activity android:name=".activities.Login" />
-        <activity android:name=".activities.Register" />
-        <activity android:name=".student.StudentMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.Login">
+
+        </activity>
+        <activity android:name=".activities.Register">
+
+
+        </activity>
+        <activity android:name=".student.StudentMain">
 
         </activity>
     </application>

@@ -1,20 +1,19 @@
 package com.example.shaqrastudentscontact.student.fragments;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -31,48 +30,56 @@ import com.example.shaqrastudentscontact.student.adapters.CommunityAdapter;
 import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.example.shaqrastudentscontact.utils.Urls;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 
-public class CommunityFragment extends Fragment {
+public class CommunityFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     EditText questionET;
     ImageView postQuestionBtn;
-    Context ctx;
+    Context context;
 
     RadioGroup contentTypeSelector;
 
     RecyclerView mList;
     CommunityAdapter mAdapter;
-
+    ArrayList<Question> list;
     ProgressDialog pDialog;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
-    public CommunityFragment() {
-        // Required empty public constructor
-    }
-
+    public CommunityFragment() {}
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.ctx = context;
+        this.context = context;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_student_community, container, false);
-
+        View view =  inflater.inflate(R.layout.fragment_student_community, container, false);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.secondary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.post(() -> {
+            mSwipeRefreshLayout.setRefreshing(true);
+            get_questions();
+        });
+        return view;
     }
 
     @Override
@@ -83,28 +90,16 @@ public class CommunityFragment extends Fragment {
         postQuestionBtn = view.findViewById(R.id.question_btn);
         mList = view.findViewById(R.id.rv);
         contentTypeSelector = view.findViewById(R.id.questions_type_selector);
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Processing Please wait...");
+        pDialog.setCancelable(false);
 
-        ArrayList<Question> list = new ArrayList<Question>(){{
-            add(new Question(1,"student","what is this ?", "12-12-2022",true ));
-            add(new Question(1,"student","what is this ?", "12-12-2022",false ));
-            add(new Question(1,"student","what is this ?", "12-12-2022",true ));
-            add(new Question(1,"student","what is  ?", "12-12-2022",false ));
-            add(new Question(1,"student","how is this ?", "12-12-2022",true ));
-            add(new Question(1,"student","what is this ?", "12-12-2022",false ));
-            add(new Question(1,"student","why is this ?", "12-12-2022",true ));
-        }};
-        mAdapter = new CommunityAdapter(ctx, list);
-
-        mList.setAdapter(mAdapter);
-        postQuestionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String question = questionET.getText().toString().trim();
-                if(question.isEmpty()){
-                    Toast.makeText(ctx, ctx.getResources().getString(R.string.you_cant_post_empty_question), Toast.LENGTH_SHORT).show();
-                }else{
-                    postQuestion(question);
-                }
+        postQuestionBtn.setOnClickListener(v -> {
+            String question = questionET.getText().toString().trim();
+            if(question.isEmpty()){
+                Toast.makeText(context, context.getResources().getString(R.string.you_cant_post_empty_question), Toast.LENGTH_SHORT).show();
+            }else{
+                postQuestion(question);
             }
         });
 
@@ -125,62 +120,120 @@ public class CommunityFragment extends Fragment {
                     break;
             }
         });
-
     }
 
-    private void postQuestion(String question) {
-        String url = Urls.POST_COMMUNITY_QUESTION;
-        pDialog.setMessage("Processing Please wait...");
+    private void get_questions(){
+        String url = Urls.GET_COMMUNITY_QUESTIONS;
+        String deptId = String.valueOf(SharedPrefManager.getInstance(context).getSelectedDept());
         pDialog.show();
-
-        int id = SharedPrefManager.getInstance(ctx).getUserId();
-
-        AndroidNetworking.post(url).setPriority(Priority.MEDIUM)
-                .addBodyParameter("id",String.valueOf(id))
-                .addBodyParameter("question",question)
+        list = new ArrayList<Question>();
+        AndroidNetworking.get(url)
+                .setPriority(Priority.MEDIUM)
+                .addQueryParameter("department_id", deptId)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
+                        try {
+                            String messageGot = "founded";
+                            String message = response.getString("message");
+                            if (message.toLowerCase().contains(messageGot.toLowerCase())) {
+                                JSONArray jsonArray = response.getJSONArray("data");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    JSONObject student_data = obj.getJSONObject("student");
+                                            list.add(
+                                            new Question(
+                                                    Integer.parseInt(obj.getString("id")),
+                                                    student_data.getString("name"),
+                                                    obj.getString("question"),
+                                                    obj.getString("created_at"),
+                                                    obj.getInt("is_common")==1
+                                            )
+                                    );
+                                }
+                                mAdapter = new CommunityAdapter(context, list);
+
+                                mList.setAdapter(mAdapter);
+                            } else {
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                            }
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            pDialog.dismiss();
+                        } catch (Exception e) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            pDialog.dismiss();
+                            e.printStackTrace();
+                            Log.e("cquestions catch", e.getMessage());
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                         pDialog.dismiss();
+                        Log.e("cquestions anerror", error.getErrorBody());
+                    }
+                });
+    }
+
+    @Override
+    public void onRefresh() {
+        get_questions();
+    }
+
+    private void postQuestion(String question) {
+        pDialog.show();
+
+        String url = Urls.POST_COMMUNITY_QUESTION;
+        String studentId = String.valueOf(SharedPrefManager.getInstance(context).getUserId());
+        String departmentId = String.valueOf(SharedPrefManager.getInstance(context).getSelectedDept());
+        AndroidNetworking.post(url)
+                .addBodyParameter("student_id", studentId)
+                .addBodyParameter("question", question)
+                .addBodyParameter("department_id", departmentId)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
                         try {
                             //converting response to json object
                             JSONObject obj = response;
+                            String message = obj.getString("message");
+                            String userFounded = "founded";//TODO
                             //if no error in response
-                            if (obj.getInt("status") == 1) {
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("data");
-//                                User user;
-//                                SharedPrefManager.getInstance(getApplicationContext()).setUserType(Constants.USER);
-//                                user = new User(
-//                                        Integer.parseInt(userJson.getString("id")),
-//                                        userJson.getString("name"),
-//                                        "+966 "+userJson.getString("email")
-//                                );
-//
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//                                goToUserMainActivity();
-//                                finish();
-//
-//                                mRegisterBtn.setEnabled(true);
-//                            } else if(obj.getInt("status") == -1){
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                                mRegisterBtn.setEnabled(true);
+                            if (message.toLowerCase().contains(userFounded.toLowerCase())) {
+                                Toast.makeText(context, context.getResources().getString(R.string.success_post_question), Toast.LENGTH_SHORT).show();
                             }
+                            pDialog.dismiss();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.e("postQ catch", e.getMessage());
+                            pDialog.dismiss();
                         }
                     }
                     @Override
                     public void onError(ANError anError) {
                         pDialog.dismiss();
-                        Toast.makeText(ctx, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("postQ", anError.getErrorBody());
+                        try {
+                            JSONObject error = new JSONObject(anError.getErrorBody());
+                            JSONObject data = error.getJSONObject("data");
+                            Toast.makeText(context, error.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (data.has("student_id")) {
+                                Toast.makeText(context, data.getJSONArray("student_id").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (data.has("question")) {
+                                Toast.makeText(context, data.getJSONArray("question").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (data.has("department_id")) {
+                                Toast.makeText(context, data.getJSONArray("department_id").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
-
     }
+
 }

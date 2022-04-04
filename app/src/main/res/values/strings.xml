@@ -33,7 +33,6 @@
     <string name="show_message">Show message</string>
     <string name="ok">Ok</string>
     <string name="message">Message : </string>
-
     <string name="start_at">start at</string>
     <string name="end_at">end at</string>
     <string name="choose_department">Select department</string>
@@ -96,7 +95,22 @@
     <string name="screenshot">Screenshot</string>
     <string name="book">Book</string>
     <string name="empty_reply">You can not send an empty reply</string>
+    <string name="requested_question">Requested questions</string>
+    <string name="schedule">schedule</string>
+    <string name="honor_student_name">Honor student name</string>
     <string name="show_reply">Show your reply</string>
+    <string name="honor_details">Honor Details</string>
+    <string name="honor_students">Honor students</string>
+    <string name="hint_dept">Department</string>
+    <string name="hint_specialization">Specialization</string>
+    <string name="dept_missing_message">Please enter your department</string>
+    <string name="spec_missing_message"> Please enter your Specialization</string>
+    <string name="hint_verification_code">Verification code</string>
+    <string name="btn_verify">Verify</string>
+    <string name="password_edit">Password edit successfully</string>
+    <string name="wrong_pass">Wrong email or password</string>
+    <string name="success_post_question">"Post question successfully "</string>
+    <string name="success_post_reply">"Post reply successfully "</string>
 
 
 </resources>

@@ -68,11 +68,11 @@ public class HonorStudentRequestedQuestionsFragment extends Fragment {
 
         list = new ArrayList<HonorStudentQuestion>()
         {{
-            add(new HonorStudentQuestion(1, 12, "saad", 2, "details", "answer", "20/10/2021"));
-            add(new HonorStudentQuestion(1, 12, "saad", 2, "details", "answer", "20/10/2021"));
-            add(new HonorStudentQuestion(1, 12, "saad", 2, "details", "", "20/10/2021"));
-            add(new HonorStudentQuestion(1, 12, "saad", 2, "details", "", "20/10/2021"));
-            add(new HonorStudentQuestion(1, 12, "saad", 2, "details", "", "20/10/2021"));
+            add(new HonorStudentQuestion(1, 12, "arwa", 2, "title", "content", "","20/10/2021"));
+            add(new HonorStudentQuestion(1, 12, "mona", 2, "title", "content", "answer","20/10/2021"));
+            add(new HonorStudentQuestion(1, 12, "thani", 2, "title", "content", "answer","20/10/2021"));
+            add(new HonorStudentQuestion(1, 12, "worod", 2, "title", "content", "answer","20/10/2021"));
+            add(new HonorStudentQuestion(1, 12, "salma", 2, "title", "content", "","20/10/2021"));
 
         }};
 

@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
+    android:background="@color/colorAccent"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
@@ -26,10 +26,10 @@
             android:padding="10dp"
             android:singleLine="true"
             android:inputType="textCapWords"
-            android:background="@color/colorAccent"
+            android:background="@color/white"
             android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint"/>
-
+            android:textColorHint="@color/input_login_hint"
+            />
 
         <EditText
             android:id="@+id/email"
@@ -40,10 +40,9 @@
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
-            android:background="@color/colorAccent"
+            android:background="@color/white"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint" />
-
 
         <EditText
             android:id="@+id/password"
@@ -54,9 +53,23 @@
             android:inputType="textPassword"
             android:padding="10dp"
             android:singleLine="true"
-            android:background="@color/colorAccent"
+            android:background="@color/white"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint" />
+
+        <EditText
+            android:id="@+id/specialization"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/hint_specialization"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:background="@color/white"
+            android:textColor="@color/input_login"
+            android:textColorHint="@color/input_login_hint" />
+
 
 
         <RadioGroup
@@ -65,7 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:padding="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layoutDirection="ltr">
 
             <RadioButton
                 android:id="@+id/student"
@@ -106,8 +120,9 @@
             android:background="@null"
             android:text="@string/btn_link_to_login"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/primaryTextColorDark"
             android:textSize="15sp" />
+
     </LinearLayout>
 
 </LinearLayout>
