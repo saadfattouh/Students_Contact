@@ -60,19 +60,14 @@ public class HonorStudentsAdapter extends RecyclerView.Adapter<HonorStudentsAdap
                 navController.navigate(R.id.action_HonorStudent_to_HonorDetails, bundle);
             }
         });
-
-
     }
-
 
     @Override
     public int getItemCount() {
         return list.size();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-
 
         TextView name, email;
 
@@ -80,7 +75,6 @@ public class HonorStudentsAdapter extends RecyclerView.Adapter<HonorStudentsAdap
             super(itemView);
             this.name = itemView.findViewById(R.id.name);
             this.email = itemView.findViewById(R.id.email);
-
         }
     }
 }

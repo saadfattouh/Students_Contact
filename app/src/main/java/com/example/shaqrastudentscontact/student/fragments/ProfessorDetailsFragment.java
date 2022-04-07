@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +25,21 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.ProfessorQuestion;
+import com.example.shaqrastudentscontact.models.Question;
+import com.example.shaqrastudentscontact.student.adapters.CommunityAdapter;
 import com.example.shaqrastudentscontact.student.adapters.ProfQuestionRepliesAdapter;
 import com.example.shaqrastudentscontact.utils.Constants;
+import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 import com.example.shaqrastudentscontact.utils.Urls;
 
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ProfessorDetailsFragment extends Fragment {
+public class ProfessorDetailsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    Context ctx;
+    Context context;
 
     TextView askBtn;
     TextView mName, mEmail , mStartFreeTime, mEndFreeTime;
@@ -43,21 +48,20 @@ public class ProfessorDetailsFragment extends Fragment {
 
     NavController navController;
 
-
-    RecyclerView mQuestionsList;
+    RecyclerView mList;
     ProfQuestionRepliesAdapter mAdapter;
-    ArrayList<ProfessorQuestion> questions;
+    ArrayList<ProfessorQuestion> list;
     ProgressDialog pDialog;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.ctx = context;
+        this.context = context;
     }
 
-    public ProfessorDetailsFragment() {
-    }
+    public ProfessorDetailsFragment() {}
 
 
     @Override
@@ -76,7 +80,18 @@ public class ProfessorDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_professor_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_professor_details, container, false);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.secondary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.post(() -> {
+            mSwipeRefreshLayout.setRefreshing(true);
+            getQuestionsToProf();
+        });
+        return view;
     }
 
     @Override
@@ -84,7 +99,7 @@ public class ProfessorDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         askBtn = view.findViewById(R.id.ask_btn);
-        mQuestionsList = view.findViewById(R.id.rv);
+        mList = view.findViewById(R.id.rv);
         mName = view.findViewById(R.id.name);
         mEmail = view.findViewById(R.id.email);
         mStartFreeTime = view.findViewById(R.id.from);
@@ -92,9 +107,11 @@ public class ProfessorDetailsFragment extends Fragment {
 
         mName.setText(profName);
         mEmail.setText(profEmail);
-        mStartFreeTime.setText(profStartFreeTime);
-        mEndFreeTime.setText(profEndFreeTime);
-
+        mStartFreeTime.setText(profStartFreeTime.equals("null")?"no time selected":profStartFreeTime);
+        mEndFreeTime.setText(profEndFreeTime.equals("null")?"no time selected":profEndFreeTime);
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Processing Please wait...");
+        pDialog.setCancelable(false);
 
         askBtn.setOnClickListener(v -> {
 
@@ -105,73 +122,67 @@ public class ProfessorDetailsFragment extends Fragment {
 
         });
 
-        questions = new ArrayList<ProfessorQuestion>()
-        {{
-            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima","title", "how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
-            add(new ProfessorQuestion(1, 2, "umaima", "title","how to solve (1+1) equation in physics ?", "no comment !", "19-3-2022"));
 
-        }};
-
-        mAdapter = new ProfQuestionRepliesAdapter(ctx, questions);
-        mQuestionsList.setAdapter(mAdapter);
 
     }
 
     private void getQuestionsToProf(){
         String url = Urls.GET_QUESTIONS_TO_PROF;
-        pDialog.setMessage("Processing Please wait...");
+        String studentId = String.valueOf(SharedPrefManager.getInstance(context).getUserId());
         pDialog.show();
-
-        AndroidNetworking.post(url).setPriority(Priority.MEDIUM)
+        list = new ArrayList<ProfessorQuestion>();
+        AndroidNetworking.get(url)
+                .setPriority(Priority.MEDIUM)
+                .addQueryParameter("student_id", studentId)
+                .addQueryParameter("professor_id", professorId)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
-                        pDialog.dismiss();
                         try {
-                            //converting response to json object
-                            JSONObject obj = response;
-                            //if no error in response
-                            if (obj.getInt("status") == 1) {
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("data");
-//                                User user;
-//                                SharedPrefManager.getInstance(getApplicationContext()).setUserType(Constants.USER);
-//                                user = new User(
-//                                        Integer.parseInt(userJson.getString("id")),
-//                                        userJson.getString("name"),
-//                                        "+966 "+userJson.getString("email")
-//                                );
-//
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//                                goToUserMainActivity();
-//                                finish();
-//
-//                                mRegisterBtn.setEnabled(true);
-//                            } else if(obj.getInt("status") == -1){
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                                mRegisterBtn.setEnabled(true);
+                            String messageGot = "founded";
+                            String message = response.getString("message");
+                            if (message.toLowerCase().contains(messageGot.toLowerCase())) {
+                                JSONArray jsonArray = response.getJSONArray("data");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    list.add(
+                                            new ProfessorQuestion(
+                                                    Integer.parseInt(obj.getString("id")),
+                                                    Integer.parseInt(obj.getString("user_id")),
+                                                    obj.getString("user_id"),//TODO :this should be student name
+                                                    obj.getString("title"),
+                                                    obj.getString("content"),
+                                                    obj.getString("answer"),
+                                                    obj.getString("created_at")
+                                            )
+                                    );
+                                }
+                                mAdapter = new ProfQuestionRepliesAdapter(context, list);
+                                mList.setAdapter(mAdapter);
+                            } else {
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                             }
-                        } catch (JSONException e) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            pDialog.dismiss();
+                        } catch (Exception e) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            pDialog.dismiss();
                             e.printStackTrace();
+                            Log.e("cquestions catch", e.getMessage());
                         }
                     }
                     @Override
-                    public void onError(ANError anError) {
+                    public void onError(ANError error) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                         pDialog.dismiss();
-                        Toast.makeText(ctx, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("cquestions anerror", error.getErrorBody());
                     }
                 });
+    }
+
+    @Override
+    public void onRefresh() {
+        getQuestionsToProf();
     }
 }

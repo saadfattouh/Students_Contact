@@ -8,12 +8,12 @@ public class Constants {
 
     public static final int STUDENT_TYPE_NORMAL = 0;
     public static final int STUDENT_TYPE_HONOR = 1;
-    public static final String STUDENT_NORMAL = "student";
-    public static final String STUDENT_HONOR = "Honor student";
+    public static final String STUDENT_NORMAL_TXT = "student";
+    public static final String STUDENT_HONOR_TXT = "Honor student";
 
-    public static final String HONOR_STUDENT_KEY = "honorstudentkey";
-    public static final String HONOR_STUDENT_NAME = "honorstudentkey";
-    public static final String HONOR_STUDENT_EMAIL = "honorstudentkey";
+    public static final String HONOR_STUDENT_KEY = "honorstudenkeyy";
+    public static final String HONOR_STUDENT_NAME = "honorstudenname";
+    public static final String HONOR_STUDENT_EMAIL = "honorstudentemail";
 
     public static final String PROFESSOR_KEY = "professor";
     public static final String PROFESSOR_NAME = "professorName";

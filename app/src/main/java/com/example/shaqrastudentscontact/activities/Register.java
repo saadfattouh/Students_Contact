@@ -36,10 +36,9 @@ public class Register extends AppCompatActivity {
     RadioGroup mAccountTypeSelector;
 
     int selectedUserType;
-    boolean emailVerified;
 
     private ProgressDialog pDialog;
-
+     AlertDialog verificationDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,9 +82,8 @@ public class Register extends AppCompatActivity {
         mRegisterBtn.setOnClickListener(v -> {
             if(validateUserInput()){
                 if(selectedUserType==Constants.USER_TYPE_STUDENT){
-                    mRegisterBtn.setEnabled(false);
-                    register_student();
-//                verifyEmail();
+//                    register_student();
+                    verifyEmail();
                 }else{
                     Intent i = new Intent(this, ChooseDepartmentActivity.class);
                     i.putExtra(Constants.PROFESSOR_NAME, mNameET.getText().toString().trim());
@@ -103,15 +101,17 @@ public class Register extends AppCompatActivity {
     private void verifyEmail() {
         LayoutInflater factory = LayoutInflater.from(this);
         final View view = factory.inflate(R.layout.dilaog_email_verification, null);
-        final AlertDialog verificationDialog = new AlertDialog.Builder(this).create();
+         verificationDialog = new AlertDialog.Builder(this).create();
         verificationDialog.setView(view);
         verificationDialog.setCanceledOnTouchOutside(true);
+
 
         EditText code = view.findViewById(R.id.code);
         Button verify = view.findViewById(R.id.btn_verify_code);
         verify.setOnClickListener(v->{
             if(!code.getText().toString().trim().isEmpty()){
-                sendVerificationRequest(code.getText().toString().trim());
+               String codeFromUser = code.getText().toString().trim();
+               sendVerificationRequest(codeFromUser);
             }
         });
 
@@ -123,54 +123,58 @@ public class Register extends AppCompatActivity {
         String url = Urls.EMAIL_VERIFICATION;
         String email = mEmailET.getText().toString().trim();
 
+        Log.e("email", email);
+        Log.e("code", code);
+        Log.e("type", String.valueOf(selectedUserType));
+        pDialog.show();
         AndroidNetworking.post(url)
                 .addBodyParameter("email", email)
                 .addBodyParameter("code", code)
+                .addBodyParameter("type", String.valueOf(selectedUserType))
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
-                        pDialog.dismiss();
-
                         try {
-                            //converting response to json object
                             JSONObject obj = response;
-
-                            //todo : go to choose department
+                            String message = obj.getString("message");
+                            String success = "User founded";
                             //if no error in response
-                            if (obj.getInt("status") == 1) {
-                                if(selectedUserType == Constants.USER_TYPE_STUDENT){
-                                    register_student();
-                                    Log.e("register", "register student");
-                                }else{
-                                    Intent i = new Intent(Register.this, ChooseDepartmentActivity.class);
-                                    i.putExtra(Constants.PROFESSOR_NAME, mNameET.getText().toString().trim());
-                                    i.putExtra(Constants.PROFESSOR_EMAIL, mEmailET.getText().toString().trim());
-                                    i.putExtra(Constants.PROFESSOR_PASS, mPassET.getText().toString().trim());
-                                    i.putExtra(Constants.PROFESSOR_SPEC, mSpecializationET.getText().toString().trim());
-                                    i.putExtra(Constants.FROM,Constants.USER_TYPE_PROFESSOR);
-                                    startActivity(i);
-                                    finish();
-                                }
+                            if (message.toLowerCase().contains(success.toLowerCase())) {
 
-                            } else if(obj.getInt("status") == -1){
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                                mRegisterBtn.setEnabled(true);
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.correct_code), Toast.LENGTH_SHORT).show();
+                                verificationDialog.dismiss();
+                                goToDepts();
+                                Log.e("code", code);
+                            }else{
+                                Toast.makeText(getApplicationContext(),message, Toast.LENGTH_SHORT).show();
                             }
+                            pDialog.dismiss();
+                            mRegisterBtn.setEnabled(true);
                         } catch (JSONException e) {
+                            pDialog.dismiss();
                             e.printStackTrace();
-
+                            Log.e("codest catch", e.getMessage());
                         }
-
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         pDialog.dismiss();
-                        mRegisterBtn.setEnabled(true);
-                        Toast.makeText(Register.this, anError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("codestror", anError.getErrorBody());
+                        try {
+                            JSONObject error = new JSONObject(anError.getErrorBody());
+                            JSONObject data = error.getJSONObject("data");
+                            Toast.makeText(Register.this, error.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (data.has("email")) {
+                                Toast.makeText(getApplicationContext(), data.getJSONArray("email").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (data.has("code")) {
+                                Toast.makeText(getApplicationContext(), data.getJSONArray("code").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }
@@ -215,12 +219,12 @@ public class Register extends AppCompatActivity {
             return false;
         }else {
             if(selectedUserType == Constants.USER_TYPE_PROFESSOR){
-                if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
+                if(email.matches("^[\\w]+[\\w.%+-]*@su\\.edu\\.sa$")){
                     Toast.makeText(this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
                     return false;
                 }
             }else if(selectedUserType == Constants.USER_TYPE_STUDENT){
-                if(!email.contains(getResources().getString(R.string.student_email_suffex))){
+                if(email.matches("^[\\w]+[\\w.%+-]*@std\\.su\\.edu\\.sa$")){
                     Toast.makeText(this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
                     return false;
                 }
@@ -271,9 +275,10 @@ public class Register extends AppCompatActivity {
                                         userJson.getInt("type")
                                 );
 
+//                                verificationCode = userJson.getString("status");
+                                verifyEmail();
                                 //storing the user in shared preferences
                                 SharedPrefManager.getInstance(getApplicationContext()).studentLogin(student);
-                                goToDepts();
                             }
                             pDialog.dismiss();
                             mRegisterBtn.setEnabled(true);

@@ -16,11 +16,13 @@ public class Urls {
     public static final String GET_CHAT_LIST = "";
     public static final String GET_MESSAGES_LIST = "";
     public static final String GET_DEPARTMENTS = BASE_URL +  "get_departments";
-    public static final String GET_HONOR_STUDENTS = BASE_URL +  "";
-    public static final String GET_PROFESSORS = BASE_URL +  "";
+    public static final String GET_HONOR_STUDENTS = BASE_URL +  "get_honor_students";
+    public static final String GET_PROFESSORS = BASE_URL +  "get_professors";
     public static final String GET_BOOKS = BASE_URL +  "get_books";
-    public static final String GET_QUESTIONS_TO_PROF = BASE_URL +  "";
-    public static final String SEND_QUESTION_TO_PROF = BASE_URL +  "";
+    public static final String GET_QUESTIONS_TO_PROF = BASE_URL +  "get_my_questions_to_professor ";
+    public static final String SEND_QUESTION_TO_PROF = BASE_URL +  "ask_professor";
+    public static final String SEND_QUESTION_TO_HONOR = BASE_URL +  "ask_honor";
+    public static final String GET_QUESTIONS_TO_HONOR = BASE_URL +  "get_my_questions_to_honor";
     public static final String POST_COMMUNITY_QUESTION = BASE_URL +  "post_community_question";
     public static final String GET_COMMUNITY_QUESTIONS = BASE_URL +  "get_community_questions";
     public static final String GET_QUESTION_REPLIES = BASE_URL +  "get_community_question_replies";
@@ -36,5 +38,5 @@ public class Urls {
     //PROFESSOR
     public static final String PROFESSOR_SCHEDULE = BASE_URL + "update_professor_schedule";
 
-    public static final String EMAIL_VERIFICATION = BASE_URL +  "";
+    public static final String EMAIL_VERIFICATION = BASE_URL +  "verify_user";
 }

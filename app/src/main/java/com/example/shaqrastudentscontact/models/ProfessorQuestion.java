@@ -10,7 +10,6 @@ public class ProfessorQuestion {
     String answer;
     String date;
 
-
 //    public ProfessorQuestion(int id, int studentID, int professorId, String content, String answer) {
 //        this.id = id;
 //        this.studentID = studentID;
@@ -18,7 +17,6 @@ public class ProfessorQuestion {
 //        this.content = content;
 //        this.answer = answer;
 //    }
-
 
     public ProfessorQuestion(int id, int studentID, String studentName, String title, String content, String answer, String date) {
         this.id = id;

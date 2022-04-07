@@ -38,7 +38,6 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
 
     AppBarConfiguration mAppBarConfiguration;
 
-    SharedPrefManager prefManager;
     int accountType;
 
     @Override
@@ -47,7 +46,7 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
         setContentView(R.layout.activity_student_main);
 
         Log.e("dept", SharedPrefManager.getInstance(this).getSelectedDept() + "");
-        accountType = prefManager.getStudentType();
+        accountType = SharedPrefManager.getInstance(this).getStudentType();
 
         setupNavigation(accountType);
 

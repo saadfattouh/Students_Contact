@@ -23,8 +23,7 @@ import com.example.shaqrastudentscontact.utils.SharedPrefManager;
 
 public class StudentProfileFragment extends Fragment {
 
-
-    Context ctx;
+    Context context;
     TextView nameTV, typeTV, emailTV;
     Button editPassBtn;
     public NavController navController;
@@ -32,7 +31,7 @@ public class StudentProfileFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.ctx = context;
+        this.context = context;
     }
 
     public StudentProfileFragment() {
@@ -54,7 +53,7 @@ public class StudentProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SharedPrefManager sp = SharedPrefManager.getInstance(ctx);
+        SharedPrefManager sp = SharedPrefManager.getInstance(context);
         Student student = sp.getStudentData();
 
         nameTV = view.findViewById(R.id.student_name);
@@ -63,7 +62,7 @@ public class StudentProfileFragment extends Fragment {
         editPassBtn = view.findViewById(R.id.edit_password);
 
         nameTV.setText(student.getName());
-        typeTV.setText(student.getType()== Constants.STUDENT_TYPE_NORMAL?Constants.STUDENT_NORMAL:Constants.STUDENT_HONOR);
+        typeTV.setText(student.getType()== Constants.STUDENT_TYPE_NORMAL?Constants.STUDENT_NORMAL_TXT :Constants.STUDENT_HONOR_TXT);
         emailTV.setText(student.getEmail());
         editPassBtn.setOnClickListener(v -> {
             navController = Navigation.findNavController(v);

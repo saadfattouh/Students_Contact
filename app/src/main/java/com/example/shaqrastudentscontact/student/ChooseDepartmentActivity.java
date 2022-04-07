@@ -1,5 +1,6 @@
 package com.example.shaqrastudentscontact.student;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,6 +9,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -15,6 +20,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.activities.Login;
 import com.example.shaqrastudentscontact.activities.Register;
 import com.example.shaqrastudentscontact.models.Professor;
 import com.example.shaqrastudentscontact.models.Student;
@@ -42,6 +48,9 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
     int profDeptId;
     boolean fromProf = false;
     private ProgressDialog pDialog;
+
+    String verificationCode;
+    AlertDialog verificationDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +137,8 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                 .addBodyParameter("name", profName)
                 .addBodyParameter("email", profEmail)
                 .addBodyParameter("password", profPass)
-                .addBodyParameter("'specialization' ", profSpec)
-                .addBodyParameter("'department_id' ", String.valueOf(dept_id))
+                .addBodyParameter("specialization", profSpec)
+                .addBodyParameter("department_id", String.valueOf(dept_id))
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -139,7 +148,7 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                             //converting response to json object
                             JSONObject obj = response;
                             String message = obj.getString("message");
-                            String userFounded = "User founded";
+                            String userFounded = "User Saved";
                             //if no error in response
                             if (message.toLowerCase().contains(userFounded.toLowerCase())) {
 
@@ -162,10 +171,13 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                                         userJson.getString("email")
 
                                 );
+//                                verificationCode = userJson.getString("status");
                                 //storing the user in shared preferences
                                 SharedPrefManager.getInstance(getApplicationContext()).professorLogin(professor);
-                                goToProfMain();
+                                verifyEmail();
 
+                            }else {
+                                Toast.makeText(ChooseDepartmentActivity.this , message, Toast.LENGTH_SHORT).show();
                             }
                             pDialog.dismiss();
                         } catch (JSONException e) {
@@ -194,8 +206,82 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                             if (data.has("specialization")) {
                                 Toast.makeText(getApplicationContext(), data.getJSONArray("specialization").toString(), Toast.LENGTH_SHORT).show();
                             }
-                            if (data.has("dept_id")) {
-                                Toast.makeText(getApplicationContext(), data.getJSONArray("dept_id").toString(), Toast.LENGTH_SHORT).show();
+                            if (data.has("department_id")) {
+                                Toast.makeText(getApplicationContext(), data.getJSONArray("department_id").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    private void verifyEmail() {
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View view = factory.inflate(R.layout.dilaog_email_verification, null);
+        verificationDialog = new AlertDialog.Builder(this).create();
+        verificationDialog.setView(view);
+        verificationDialog.setCanceledOnTouchOutside(true);
+
+        EditText code = view.findViewById(R.id.code);
+        Button verify = view.findViewById(R.id.btn_verify_code);
+        verify.setOnClickListener(v->{
+            if(!code.getText().toString().trim().isEmpty()){
+                String codeFromUser = code.getText().toString().trim();
+                sendVerificationRequest(codeFromUser);
+            }
+        });
+
+        verificationDialog.show();
+    }
+
+    private void sendVerificationRequest(String code) {
+
+        String url = Urls.EMAIL_VERIFICATION;
+        pDialog.show();
+        AndroidNetworking.post(url)
+                .addBodyParameter("email", profEmail)
+                .addBodyParameter("code", code)
+                .addBodyParameter("type", String.valueOf(Constants.USER_TYPE_PROFESSOR))
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject obj = response;
+                            String message = obj.getString("message");
+                            String success = "User founded";
+                            //if no error in response
+                            if (message.toLowerCase().contains(success.toLowerCase())) {
+
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.correct_code), Toast.LENGTH_SHORT).show();
+                                verificationDialog.dismiss();
+                                goToProfMain();
+                                Log.e("code", code);
+                            } else{
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("regprof catch", e.getMessage());
+                            pDialog.dismiss();
+
+                        }
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+                        pDialog.dismiss();
+                        Log.e("regiproferror", anError.getErrorBody());
+                        try {
+                            JSONObject error = new JSONObject(anError.getErrorBody());
+                            JSONObject data = error.getJSONObject("data");
+                            Toast.makeText(ChooseDepartmentActivity.this, error.getString("message"), Toast.LENGTH_SHORT).show();
+                            if (data.has("email")) {
+                                Toast.makeText(getApplicationContext(), data.getJSONArray("email").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (data.has("code")) {
+                                Toast.makeText(getApplicationContext(), data.getJSONArray("code").toString(), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -210,8 +296,10 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
     }
     @Override
     public void onItemClick(Department item) {
+
         if(fromProf){
             profDeptId = item.getId();
+
             registerProf(profDeptId);
         }else{
             SharedPrefManager.getInstance(ChooseDepartmentActivity.this).setSelectedDept(item.getId());

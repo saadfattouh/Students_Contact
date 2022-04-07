@@ -111,7 +111,10 @@
     <string name="wrong_pass">Wrong email or password</string>
     <string name="success_post_question">"Post question successfully "</string>
     <string name="success_post_reply">"Post reply successfully "</string>
+    <string name="send_question_successfully">Question send successfully</string>
     <string name="success_update_schedule">Schedule updated successfully!</string>
+    <string name="error_code">Code is not correct</string>
+    <string name="correct_code">"Correct code "</string>
 
 
 </resources>

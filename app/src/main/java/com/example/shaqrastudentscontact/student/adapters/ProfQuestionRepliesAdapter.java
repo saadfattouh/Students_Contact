@@ -48,7 +48,7 @@ public class ProfQuestionRepliesAdapter extends RecyclerView.Adapter<ProfQuestio
 
         ProfessorQuestion question = list.get(position);
 
-        holder.title.setText(question.getStudentName());
+        holder.title.setText(question.getTitle());
         holder.details.setText(question.getContent());
 
         holder.itemView.setOnClickListener(v -> {
@@ -62,7 +62,7 @@ public class ProfQuestionRepliesAdapter extends RecyclerView.Adapter<ProfQuestio
             TextView details = view.findViewById(R.id.question);
             TextView reply = view.findViewById(R.id.answer);
 
-            title.setText(question.getStudentName());
+            title.setText(question.getTitle());
             details.setText(question.getContent());
             if(question.getAnswer() != null || question.getAnswer().isEmpty()){
                 reply.setText(question.getAnswer());

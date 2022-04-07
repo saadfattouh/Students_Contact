@@ -2,9 +2,11 @@ package com.example.shaqrastudentscontact.professor.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,18 +23,14 @@ import java.util.List;
 
 public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<ProfessorRequestedQuestionsAdapter.ViewHolder> {
 
-
     Context context;
     private List<ProfessorQuestion> list;
     public NavController navController;
 
-
-    // RecyclerView recyclerView;
     public ProfessorRequestedQuestionsAdapter(Context context, ArrayList<ProfessorQuestion> list) {
         this.context = context;
         this.list = list;
     }
-
 
     @NonNull
     @Override
@@ -40,7 +38,6 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.item_requested_question, parent, false);
         ProfessorRequestedQuestionsAdapter.ViewHolder viewHolder = new ProfessorRequestedQuestionsAdapter.ViewHolder(listItem);
-
         return viewHolder;
     }
 
@@ -53,6 +50,8 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
         holder.studentName.setText(question.getStudentName());
         holder.question.setText(question.getContent());
         holder.date.setText(question.getDate());
+        holder.isReplied.setChecked(!question.getAnswer().isEmpty());
+        holder.isReplied.setEnabled(false);
 
         holder.addReply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,28 +63,27 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
             }
         });
 
-        holder.replies.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater factory = LayoutInflater.from(context);
-                final View view = factory.inflate(R.layout.dialog_question_reply, null);
-                final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
-                questionReplyDialog.setView(view);
-                questionReplyDialog.setCanceledOnTouchOutside(true);
+        holder.replies.setOnClickListener(v -> {
+            LayoutInflater factory = LayoutInflater.from(context);
+            final View view = factory.inflate(R.layout.dialog_question_reply, null);
+            final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
+            questionReplyDialog.setView(view);
+            questionReplyDialog.setCanceledOnTouchOutside(true);
 
-                TextView title = view.findViewById(R.id.title);
-                TextView details = view.findViewById(R.id.question);
-                TextView reply = view.findViewById(R.id.answer);
+            TextView title = view.findViewById(R.id.title);
+            TextView details = view.findViewById(R.id.question);
+            TextView reply = view.findViewById(R.id.answer);
 
-                title.setText(question.getStudentName());
-                details.setText(question.getContent());
-                if(question.getAnswer() != null || question.getAnswer().isEmpty()){
-                    reply.setText(question.getAnswer());
-                }else {
-                    reply.setText(context.getResources().getString(R.string.no_answer_yet));
-                }
-                questionReplyDialog.show();
+            Log.e("answer", question.getAnswer());
+
+            title.setText(question.getStudentName());
+            details.setText(question.getContent());
+            if(question.getAnswer().isEmpty()){
+                reply.setText(context.getResources().getString(R.string.no_answer_yet));
+            }else {
+                reply.setText(question.getAnswer());
             }
+            questionReplyDialog.show();
         });
     }
 
@@ -98,6 +96,8 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView studentName, question, date, replies, addReply;
+        public CheckBox isReplied;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -106,6 +106,7 @@ public class ProfessorRequestedQuestionsAdapter extends RecyclerView.Adapter<Pro
             this.date = itemView.findViewById(R.id.date);
             this.addReply = itemView.findViewById(R.id.reply);
             this.replies = itemView.findViewById(R.id.replies);
+            this.isReplied = itemView.findViewById(R.id.is_replied);
         }
     }
 

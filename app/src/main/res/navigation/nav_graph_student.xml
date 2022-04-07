@@ -87,7 +87,7 @@
     </fragment>
     <fragment
         android:id="@+id/askHonorFragment"
-        android:name="com.example.shaqrastudentscontact.student.fragments.askHonorStudentFragment"
+        android:name="com.example.shaqrastudentscontact.student.fragments.AskHonorStudentFragment"
         android:label="@string/ask_honor_students"
         tools:layout="@layout/fragment_ask_honor_student" />
 
@@ -137,7 +137,7 @@
     </fragment>
     <fragment
         android:id="@+id/ReplyToQuestionFragment"
-        android:name="com.example.shaqrastudentscontact.professor.fragments.ProfessorReplyQuestionFragment"
+        android:name="com.example.shaqrastudentscontact.honor_student.fragments.HonorStudentReplyToQuestionFragment"
         android:label="@string/reply"
-        tools:layout="@layout/fragment_professor_reply_question" />
+        tools:layout="@layout/fragment_honor_student_reply_to_question" />
 </navigation>

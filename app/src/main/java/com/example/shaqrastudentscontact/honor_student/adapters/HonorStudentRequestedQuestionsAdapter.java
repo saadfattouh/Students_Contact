@@ -22,18 +22,14 @@ import java.util.List;
 
 public class HonorStudentRequestedQuestionsAdapter extends RecyclerView.Adapter<HonorStudentRequestedQuestionsAdapter.ViewHolder> {
 
-
     Context context;
     private List<HonorStudentQuestion> list;
     public NavController navController;
 
-
-    // RecyclerView recyclerView;
     public HonorStudentRequestedQuestionsAdapter(Context context, ArrayList<HonorStudentQuestion> list) {
         this.context = context;
         this.list = list;
     }
-
 
     @NonNull
     @Override
@@ -41,10 +37,8 @@ public class HonorStudentRequestedQuestionsAdapter extends RecyclerView.Adapter<
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.item_requested_question, parent, false);
         HonorStudentRequestedQuestionsAdapter.ViewHolder viewHolder = new HonorStudentRequestedQuestionsAdapter.ViewHolder(listItem);
-
         return viewHolder;
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull HonorStudentRequestedQuestionsAdapter.ViewHolder holder, int position) {
@@ -56,40 +50,36 @@ public class HonorStudentRequestedQuestionsAdapter extends RecyclerView.Adapter<
         holder.date.setText(question.getDate());
 
         holder.isReplied.setChecked(!question.getAnswer().isEmpty());
-        holder.addReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController = Navigation.findNavController(holder.itemView);
-                Bundle bundle = new Bundle();
-                bundle.putString("question_id", String.valueOf(question.getId()));
-                navController.navigate(R.id.action_menu_requested_questions_to_ReplyToQuestionFragment,bundle);
-            }
+        holder.isReplied.setEnabled(false);
+
+        holder.addReply.setOnClickListener(v -> {
+            navController = Navigation.findNavController(holder.itemView);
+            Bundle bundle = new Bundle();
+            bundle.putString("question_id", String.valueOf(question.getId()));
+            navController.navigate(R.id.action_menu_requested_questions_to_ReplyToQuestionFragment,bundle);
         });
 
 
-        holder.replies.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater factory = LayoutInflater.from(context);
-                final View view = factory.inflate(R.layout.dialog_question_reply, null);
-                final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
-                questionReplyDialog.setView(view);
-                questionReplyDialog.setCanceledOnTouchOutside(true);
+        holder.replies.setOnClickListener(v -> {
+            LayoutInflater factory = LayoutInflater.from(context);
+            final View view = factory.inflate(R.layout.dialog_question_reply, null);
+            final AlertDialog questionReplyDialog = new AlertDialog.Builder(context).create();
+            questionReplyDialog.setView(view);
+            questionReplyDialog.setCanceledOnTouchOutside(true);
 
-                TextView title = view.findViewById(R.id.title);
-                TextView details = view.findViewById(R.id.question);
-                TextView reply = view.findViewById(R.id.answer);
+            TextView title = view.findViewById(R.id.title);
+            TextView details = view.findViewById(R.id.question);
+            TextView reply = view.findViewById(R.id.answer);
 
-                title.setText(question.getStudentName());
-                details.setText(question.getContent());
-                if(question.getAnswer() != null || question.getAnswer().isEmpty()){
-                    reply.setText(question.getAnswer());
-                }else {
-                    reply.setText(context.getResources().getString(R.string.no_answer_yet));
-                }
-
-                questionReplyDialog.show();
+            title.setText(question.getStudentName());
+            details.setText(question.getContent());
+            if(question.getAnswer() != null || !question.getAnswer().isEmpty() || !question.getAnswer().equals("null")){
+                reply.setText(question.getAnswer());
+            }else {
+                reply.setText(context.getResources().getString(R.string.no_answer_yet));
             }
+
+            questionReplyDialog.show();
         });
     }
 

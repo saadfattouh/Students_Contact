@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -88,7 +87,8 @@ public class Login extends AppCompatActivity {
                     return;
                 }else {
                     if(selectedUserType == Constants.USER_TYPE_PROFESSOR){
-                        if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
+//                        if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
+                        if(!email.matches("^[\\w]+[\\w.%+-]*@su\\.edu\\.sa$")){
                                 Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
                                 mLoginBtn.setEnabled(true);
                                 return ;
@@ -96,7 +96,8 @@ public class Login extends AppCompatActivity {
                             loginUser(email, password);
                         }
                     }else if(selectedUserType == Constants.USER_TYPE_STUDENT){
-                        if(email.contains(getResources().getString(R.string.student_email_suffex))){//TODO !
+//                        if(!email.contains(getResources().getString(R.string.student_email_suffex))){
+                        if(!email.matches("^[\\w]+[\\w.%+-]*@std\\.su\\.edu\\.sa$")){
                             Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
                             mLoginBtn.setEnabled(true);
                             return;
@@ -138,7 +139,7 @@ public class Login extends AppCompatActivity {
                                 int userType = userJson.getInt("type");
 
                                 Log.e("uType", userType+"");
-                                if(userType == Constants.USER_TYPE_STUDENT){
+                                if(userType == Constants.USER_TYPE_STUDENT || userType == Constants.STUDENT_TYPE_HONOR){
                                     Student student;
                                     student = new Student(
                                             Integer.parseInt(userJson.getString("id")),

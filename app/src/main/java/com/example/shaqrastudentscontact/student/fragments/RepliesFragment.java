@@ -87,16 +87,6 @@ public class RepliesFragment extends Fragment implements SwipeRefreshLayout.OnRe
         pDialog.setMessage("Processing Please wait...");
         pDialog.setCancelable(false);
 
-//        ArrayList<Reply> list = new ArrayList<Reply>(){{
-//            add(new Reply(1,"student","what is this ?", "12-12-2022" ));
-//            add(new Reply(1,"student","what is this ?", "12-12-2022" ));
-//            add(new Reply(1,"student","what is this ?", "12-12-2022" ));
-//            add(new Reply(1,"student","what is  ?", "12-12-2022" ));
-//            add(new Reply(1,"student","how is this ?", "12-12-2022"));
-//            add(new Reply(1,"student","what is this ?", "12-12-2022"));
-//            add(new Reply(1,"student","why is this ?", "12-12-2022"));
-//        }};
-
         replyBtn.setOnClickListener(v -> {
             String reply = replyET.getText().toString().trim();
             if(reply.isEmpty()){

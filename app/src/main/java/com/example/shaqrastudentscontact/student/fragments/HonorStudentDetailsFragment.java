@@ -10,46 +10,55 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.HonorStudentQuestion;
 import com.example.shaqrastudentscontact.student.adapters.HonorQuestionRepliesAdapter;
 import com.example.shaqrastudentscontact.utils.Constants;
+import com.example.shaqrastudentscontact.utils.SharedPrefManager;
+import com.example.shaqrastudentscontact.utils.Urls;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class HonorStudentDetailsFragment extends Fragment {
+public class HonorStudentDetailsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    Context ctx;
+    Context context;
 
-    TextView askBtn;
-    TextView mName, mEmail;
+    TextView askBtn, mName, mEmail;
 
-    String honorStudentId;
-    String name, email;
+    String honorStudentId, honorName, honorEmail;
 
     NavController navController;
 
-
-    RecyclerView mQuestionsList;
+    RecyclerView mList;
     HonorQuestionRepliesAdapter mAdapter;
-    ArrayList<HonorStudentQuestion> questions;
+    ArrayList<HonorStudentQuestion> list;
     ProgressDialog pDialog;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.ctx = context;
+        this.context = context;
     }
 
-    public HonorStudentDetailsFragment() {
-        // Required empty public constructor
-    }
+    public HonorStudentDetailsFragment() {}
 
 
     @Override
@@ -57,14 +66,26 @@ public class HonorStudentDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
             honorStudentId = getArguments().getString(Constants.HONOR_STUDENT_KEY, null);
+            honorName = getArguments().getString(Constants.HONOR_STUDENT_NAME, null);
+            honorEmail = getArguments().getString(Constants.HONOR_STUDENT_EMAIL, null);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_honor_student_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_honor_student_details, container, false);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.secondary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.post(() -> {
+            mSwipeRefreshLayout.setRefreshing(true);
+            getQuestionsToHonor();
+        });
+        return view;
     }
 
     @Override
@@ -73,28 +94,81 @@ public class HonorStudentDetailsFragment extends Fragment {
 
         mName = view.findViewById(R.id.name);
         mEmail = view.findViewById(R.id.email);
-        mName.setText(name);
-        mEmail.setText(email);
+        mName.setText(honorName);
+        mEmail.setText(honorEmail);
         askBtn = view.findViewById(R.id.ask_btn);
-        mQuestionsList = view.findViewById(R.id.rv);
+        mList = view.findViewById(R.id.rv);
+
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Processing Please wait...");
+        pDialog.setCancelable(false);
 
         askBtn.setOnClickListener(v -> {
-
             navController = Navigation.findNavController(view);
             Bundle bundle = new Bundle();
             bundle.putString(Constants.HONOR_STUDENT_KEY, honorStudentId);
             navController.navigate(R.id.action_honorDetailsFragment_to_askHonorFragment, bundle);
-
         });
+    }
 
-        questions = new ArrayList<HonorStudentQuestion>()
-        {{
-            add(new HonorStudentQuestion(1, 1, "ahmad", 1,"question", "how to solve (1+1) equation in physics ?", "no comment !", "8-2-2022"));
+    private void getQuestionsToHonor(){
+        String url = Urls.GET_QUESTIONS_TO_HONOR;
+        String studentId = String.valueOf(SharedPrefManager.getInstance(context).getUserId());
+        pDialog.show();
+        list = new ArrayList<HonorStudentQuestion>();
+        AndroidNetworking.get(url)
+                .setPriority(Priority.MEDIUM)
+                .addQueryParameter("student_id", studentId)
+                .addQueryParameter("honor_id", honorStudentId)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String messageGot = "founded";
+                            String message = response.getString("message");
+                            if (message.toLowerCase().contains(messageGot.toLowerCase())) {
+                                JSONArray jsonArray = response.getJSONArray("data");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    list.add(
+                                            new HonorStudentQuestion(
+                                                    Integer.parseInt(obj.getString("id")),
+                                                    Integer.parseInt(obj.getString("user_id")),
+                                                    obj.getString("user_id"),//TODO :this should be student name
+                                                    Integer.parseInt(obj.getString("honor_id")),
+                                                    obj.getString("title"),
+                                                    obj.getString("content"),
+                                                    obj.getString("answer"),
+                                                    obj.getString("created_at")
+                                            )
+                                    );
+                                }
+                                mAdapter = new HonorQuestionRepliesAdapter(context, list);
+                                mList.setAdapter(mAdapter);
+                            } else {
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                            }
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            pDialog.dismiss();
+                        } catch (Exception e) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            pDialog.dismiss();
+                            e.printStackTrace();
+                            Log.e("cquestions catch", e.getMessage());
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        pDialog.dismiss();
+                        Log.e("cquestions anerror", error.getErrorBody());
+                    }
+                });
+    }
 
-        }};
-
-        mAdapter = new HonorQuestionRepliesAdapter(ctx, questions);
-        mQuestionsList.setAdapter(mAdapter);
-
+    @Override
+    public void onRefresh() {
+        getQuestionsToHonor();
     }
 }

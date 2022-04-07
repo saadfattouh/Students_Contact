@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,9 +37,8 @@ public class ScheduleFreeTime extends Fragment {
 
     Context context;
 
-    int profId;
-
     ProgressDialog pDialog;
+    NavController navController;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -52,8 +53,6 @@ public class ScheduleFreeTime extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        profId = SharedPrefManager.getInstance(context).getUserId();
-
     }
 
     @Override
@@ -68,6 +67,11 @@ public class ScheduleFreeTime extends Fragment {
         mFromET = view.findViewById(R.id.from);
         mToET = view.findViewById(R.id.to);
         mScheduleBtn = view.findViewById(R.id.schedule);
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Processing please wait...");
+        pDialog.setCancelable(false);
+
+        navController = Navigation.findNavController(view);
 
         mScheduleBtn.setOnClickListener(v -> {
                     if(Validation.validateInput(context, mFromET, mToET)){
@@ -77,21 +81,15 @@ public class ScheduleFreeTime extends Fragment {
                         schedule(from, to);
                     }
         });
-
-
     }
-
     private void schedule(String from, String to) {
-        pDialog = new ProgressDialog(context);
-        pDialog.setMessage("Processing please wait...");
-        pDialog.setCancelable(false);
-
-        String url = Urls.PROFESSOR_SCHEDULE;
-
         pDialog.show();
 
+        String url = Urls.PROFESSOR_SCHEDULE;
+        String profId = String.valueOf(SharedPrefManager.getInstance(context).getUserId());
+
         AndroidNetworking.post(url)
-                .addBodyParameter("professor_id", String.valueOf(profId))
+                .addBodyParameter("professor_id", profId)
                 .addBodyParameter("start_free_time", from)
                 .addBodyParameter("end_free_time", to)
                 .setPriority(Priority.MEDIUM)
@@ -107,8 +105,10 @@ public class ScheduleFreeTime extends Fragment {
                             //if no error in response
                             if (message.equals(userSaved)) {
                                 Toast.makeText(context, context.getResources().getString(R.string.success_update_schedule), Toast.LENGTH_SHORT).show();
+                                navController.popBackStack();
+
                             }else {
-                                Toast.makeText(context, "some error has occured, please try again...", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "some error has occurred, please try again...", Toast.LENGTH_SHORT).show();
                             }
                             pDialog.dismiss();
                         } catch (JSONException e) {

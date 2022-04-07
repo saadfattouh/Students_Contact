@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:backgroundTint="@color/white"
-            android:lines="8"
+            android:lines="7"
             android:hint="@string/reply_content"
             android:textColorHint="@color/input_register_hint"
             android:textSize="18sp"
