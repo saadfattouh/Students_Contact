@@ -13,6 +13,8 @@ public class SharedPrefManager {
 
     //student registration/ login
     private static final String KEY_ID = "keyid";
+    private static final String KEY_VERIFIED = "keyverified";
+    private static final String KEY_VERIFY_CODE = "keyverifycode";
     private static final String KEY_NAME = "keyname";
     private static final String KEY_EMAIL = "keyemail";
     private static final String KEY_STUDENT_TYPE = "studentType";
@@ -26,13 +28,13 @@ public class SharedPrefManager {
     private static final String KEY_SELECTED_DEPT_ID = "key_dept_id";
 
 
-
     private static SharedPrefManager mInstance;
     private static Context context;
 
     public SharedPrefManager(Context context) {
         SharedPrefManager.context = context;
     }
+
     public static synchronized SharedPrefManager getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new SharedPrefManager(context);
@@ -50,6 +52,29 @@ public class SharedPrefManager {
         editor.putInt(KEY_STUDENT_TYPE, student.getType());
         editor.putInt(KEY_USER_TYPE, Constants.USER_TYPE_STUDENT);
         editor.apply();
+    }
+
+    public void setVerified(boolean verified) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_VERIFIED, verified);
+        editor.apply();
+
+    }
+    public void setVerificationCode(String verificationCode) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_VERIFY_CODE, verificationCode);
+        editor.apply();
+
+    }
+    public boolean isVerified() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(KEY_VERIFIED, false) ;
+    }
+    public String getVerificationCode() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_VERIFY_CODE, null) ;
     }
 
     //this method will store the professor data in shared preferences
@@ -72,29 +97,31 @@ public class SharedPrefManager {
         return sharedPreferences.getInt(KEY_ID, -1) != -1;
     }
 
-    public void setStudentType(int type){
+    public void setStudentType(int type) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_STUDENT_TYPE, type);
         editor.apply();
     }
 
-    public int getStudentType(){
+    public int getStudentType() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_STUDENT_TYPE, -1);
     }
-    public int getUserType(){
+
+    public int getUserType() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_USER_TYPE, -1);
     }
-    public void setSelectedDept(int deptId){
+
+    public void setSelectedDept(int deptId) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_SELECTED_DEPT_ID, deptId);
         editor.apply();
     }
 
-    public int getSelectedDept(){
+    public int getSelectedDept() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_SELECTED_DEPT_ID, -1);
     }
@@ -107,7 +134,6 @@ public class SharedPrefManager {
     }
 
 
-
     //this method will give the logged in user
     public Professor getProfessorData() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -117,7 +143,7 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_PROFESSOR_DEPT_NAME, null),
                 sharedPreferences.getString(KEY_PROFESSOR_SPECIALIZATION, null),
                 sharedPreferences.getString(KEY_EMAIL, null)
-                );
+        );
     }
 
 
@@ -138,9 +164,6 @@ public class SharedPrefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear().commit();
     }
-
-
-
 
 
 }

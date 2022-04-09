@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,24 +15,29 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.model.Progress;
 import com.example.shaqrastudentscontact.R;
+import com.example.shaqrastudentscontact.models.Book;
 import com.example.shaqrastudentscontact.models.Professor;
 import com.example.shaqrastudentscontact.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfessorsAdapter extends RecyclerView.Adapter<ProfessorsAdapter.ViewHolder> {
+public class ProfessorsAdapter extends RecyclerView.Adapter<ProfessorsAdapter.ViewHolder>  implements Filterable {
 
 
     Context context;
     private List<Professor> list;
+    private List<Professor> filteredList;
     public NavController navController;
 
     // RecyclerView recyclerView;
     public ProfessorsAdapter(Context context, ArrayList<Professor> list) {
         this.context = context;
         this.list = list;
+        this.filteredList = list;
+
     }
 
     @NonNull
@@ -88,5 +95,37 @@ public class ProfessorsAdapter extends RecyclerView.Adapter<ProfessorsAdapter.Vi
         }
     }
 
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                FilterResults filterResults = new FilterResults();
+
+                if(charSequence == null | charSequence.length() == 0){
+                    filterResults.count = filteredList.size();
+                    filterResults.values = filteredList;
+                }else{
+                    String searchChr = charSequence.toString().toLowerCase();
+                    List<Professor> resultData = new ArrayList<>();
+
+                    for(Professor professor: filteredList){
+                        if(professor.getName().toLowerCase().contains(searchChr)){
+                            resultData.add(professor);
+                        }
+                    }
+                    filterResults.count = resultData.size();
+                    filterResults.values = resultData;
+                }
+                return filterResults;
+            }
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                list = (List<Professor>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+        return filter;
+    }
 
 }

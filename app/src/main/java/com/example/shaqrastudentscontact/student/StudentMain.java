@@ -68,7 +68,7 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
 
             navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-            mAppBarConfiguration = new AppBarConfiguration.Builder( R.id.menu_community,R.id.menu_professors,R.id.menu_honor_students,R.id.menu_books, R.id.menu_student_profile, R.id.menu_requested_questions).setOpenableLayout(drawerLayout).build();
+            mAppBarConfiguration = new AppBarConfiguration.Builder( R.id.menu_community,R.id.menu_professors,R.id.menu_honor_students,R.id.menu_books, R.id.menu_student_profile, R.id.menu_requested_questions, R.id.menu_rules).setOpenableLayout(drawerLayout).build();
 
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
@@ -149,7 +149,9 @@ public class StudentMain extends AppCompatActivity implements NavigationView.OnN
             case R.id.menu_requested_questions:
                 destination = R.id.menu_requested_questions;
                 break;
-
+            case R.id.menu_rules:
+                destination = R.id.menu_rules;
+                break;
             case R.id.menu_logout:
                 SharedPrefManager.getInstance(this).logout();
                 startActivity(new Intent(this, Login.class));

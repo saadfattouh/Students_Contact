@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -41,6 +42,7 @@ public class ProfessorsFragment extends Fragment implements SwipeRefreshLayout.O
     RecyclerView mList;
     ProfessorsAdapter mAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    SearchView searchView;
 
     private ProgressDialog pDialog;
 
@@ -84,6 +86,20 @@ public class ProfessorsFragment extends Fragment implements SwipeRefreshLayout.O
         pDialog.setMessage("Processing Please wait...");
         pDialog.setCancelable(false);
 
+        searchView = view.findViewById(R.id.search);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
 
     private void getProfs() {

@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity android:name=".professor.ProfessorMain" />
-        <activity android:name=".student.ChooseDepartmentActivity" />
+        <activity android:name=".activities.ChooseDepartmentActivity" />
         <activity android:name=".activities.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

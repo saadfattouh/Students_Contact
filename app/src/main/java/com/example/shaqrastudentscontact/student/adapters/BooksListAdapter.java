@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,10 +22,11 @@ import com.example.shaqrastudentscontact.models.Book;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BooksListAdapter extends RecyclerView.Adapter<BooksListAdapter.ViewHolder> {
+public class BooksListAdapter extends RecyclerView.Adapter<BooksListAdapter.ViewHolder> implements Filterable {
 
     Context context;
     private List<Book> list;
+    private List<Book> filtredBooks;
     public NavController navController;
 
 
@@ -31,6 +34,7 @@ public class BooksListAdapter extends RecyclerView.Adapter<BooksListAdapter.View
     public BooksListAdapter(Context context, ArrayList<Book> list) {
         this.context = context;
         this.list = list;
+        this.filtredBooks = list;
     }
 
     @NonNull
@@ -66,6 +70,39 @@ public class BooksListAdapter extends RecyclerView.Adapter<BooksListAdapter.View
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                FilterResults filterResults = new FilterResults();
+
+                if(charSequence == null | charSequence.length() == 0){
+                    filterResults.count = filtredBooks.size();
+                    filterResults.values = filtredBooks;
+                }else{
+                    String searchChr = charSequence.toString().toLowerCase();
+                    List<Book> resultData = new ArrayList<>();
+
+                    for(Book book: filtredBooks){
+                        if(book.getTitle().toLowerCase().contains(searchChr)){
+                            resultData.add(book);
+                        }
+                    }
+                    filterResults.count = resultData.size();
+                    filterResults.values = resultData;
+                }
+                return filterResults;
+            }
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                list = (List<Book>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+        return filter;
     }
 
 

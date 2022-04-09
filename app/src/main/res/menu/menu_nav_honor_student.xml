@@ -39,6 +39,18 @@
             android:icon="@drawable/ic_answer_questions"
             android:title="@string/students_questions" />
         <item
+            android:id="@+id/menu_report"
+            android:icon="@drawable/ic_report"
+            android:title="@string/send_report"
+            android:actionLayout="@layout/fragment_send_problem_report"
+            />
+        <item
+            android:id="@+id/menu_rules"
+            android:icon="@drawable/ic_book_library"
+            android:title="@string/university_rules"
+            android:actionLayout="@layout/fragment_university_rules"
+            />
+        <item
             android:id="@+id/menu_logout"
             android:icon="@drawable/ic_logout"
             android:title="@string/logout"

@@ -71,7 +71,7 @@
                 android:textSize="18sp"
                 android:textColor="@android:color/black"
                 android:alpha="0.9"
-                android:text="Design platform for academic society\n\nDesign platform for academic society\nDesign platform for academic society\nDesign platform for academic society\nDesign platform for academic society"/>
+                android:text="Design platform for academic society\nDesign platform for academic society"/>
 
             <TextView
                 android:id="@+id/replies"

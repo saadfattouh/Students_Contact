@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Shaqraa Students Contact</string>
+    <string name="app_name">Shaqra Students Contact</string>
 
     <string name="hint_user_name">User name</string>
     <string name="hint_password">Password</string>
@@ -36,7 +36,7 @@
     <string name="start_at">start at</string>
     <string name="end_at">end at</string>
     <string name="choose_department">Select department</string>
-    <string name="professor_email_suffex">cs.su@gmail.com</string>
+    <string name="professor_email_suffex">.cs.su@gmail.com</string>
     <string name="please_provide_a_professor_email">please provide a valid professor email</string>
     <string name="student_email_suffex">std.su.edu.sa</string>
     <string name="please_provide_a_valid_student_email">please provide a valid student email</string>
@@ -112,9 +112,37 @@
     <string name="success_post_question">"Post question successfully "</string>
     <string name="success_post_reply">"Post reply successfully "</string>
     <string name="send_question_successfully">Question send successfully</string>
+    <string name="send_report_successfully">Report send successfully</string>
+    <string name="some_error">Some error happened please try again later</string>
     <string name="success_update_schedule">Schedule updated successfully!</string>
     <string name="error_code">Code is not correct</string>
     <string name="correct_code">"Correct code "</string>
+    <string name="rulesTitle">المسموح به من المؤكلات:</string>
+    <string name="rule1">برادات الشاهي والقهوة</string>
+    <string name="rule2">المشروبات الخارجية وذلك عند الدخول بها في الصباح فقط</string>
+    <string name="rule3">الأكل الخراجي كالساندويش لا تزيد عن اربع أشخاص</string>
+    <string name="rule4">الحلا الشخصي</string>
+
+    <string name="bansTitle">الممنوعات</string>
+    <string name="bansTitle1">الزي الرسمي داخل الجامعة :</string>
+    <string name="ban1">الملابس تكون حشمة وغير لاصقة بالجسم</string>
+    <string name="ban2">لبس العباءة داخل الحرم الجامعي أي داخل القاعات أو المبنى أو الساحات الخارجية</string>
+    <string name="bansTitle2">الممنوعات :</string>
+    <string name="ban3">السمعات الصوتية</string>
+    <string name="ban4">رفع صوت الموسيقى في الجوال</string>
+    <string name="ban5">تصوير المبنى بشكل عام سواء شخصي أو عام</string>
+    <string name="bansTitle3">المؤكلات الممنوعة :</string>
+    <string name="ban6">صواني الحلا</string>
+    <string name="ban7">صواني الأكل والحافظات</string>
+    <string name="ban8">إدخال أكل من المطعم</string>
+    <string name="university_rules">University Rules</string>
+    <string name="please_verify_your_email">Please verify your email</string>
+    <string name="search_book">Search for book</string>
+    <string name="loggedin_success">Logged in successfully</string>
+    <string name="search_professor">Search for professor</string>
+    <string name="report_title">Report title</string>
+    <string name="report_content">Report content</string>
+    <string name="send_report">Send report</string>
 
 
 </resources>

@@ -47,29 +47,13 @@
         tools:layout="@layout/fragment_ask_professor" />
 
 
-    <fragment
-        android:id="@+id/menu_honor_students_test"
-        android:name="com.example.shaqrastudentscontact.chat.ChatListFragment"
-        android:label="@string/honor_student_chat_list"
-        tools:layout="@layout/fragment_chat_list">
-        <action
-            android:id="@+id/action_HonorStudent_to_ChattingFragment"
-            app:destination="@id/ChattingFragment"
-            app:popUpTo="@id/menu_honor_students" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/ChattingFragment"
-        android:name="com.example.shaqrastudentscontact.chat.ChattingFragment"
-        android:label="@string/chatting"
-        tools:layout="@layout/fragment_chatting" />
 
 
     <fragment
         android:id="@+id/menu_honor_students"
         android:name="com.example.shaqrastudentscontact.student.fragments.HonorStudentsFragment"
         android:label="@string/honor_students"
-        tools:layout="@layout/fragment_chat_list">
+        tools:layout="@layout/fragment_student_honor_students">
         <action
             android:id="@+id/action_HonorStudent_to_HonorDetails"
             app:destination="@id/HonorDetailsFragment"
@@ -140,4 +124,14 @@
         android:name="com.example.shaqrastudentscontact.honor_student.fragments.HonorStudentReplyToQuestionFragment"
         android:label="@string/reply"
         tools:layout="@layout/fragment_honor_student_reply_to_question" />
+    <fragment
+        android:id="@+id/menu_rules"
+        android:name="com.example.shaqrastudentscontact.student.fragments.UniversityRulesFragment"
+        android:label="@string/university_rules"
+        tools:layout="@layout/fragment_university_rules" />
+    <fragment
+        android:id="@+id/menu_report"
+        android:name="com.example.shaqrastudentscontact.student.SendProblemReportFragment"
+        android:label="@string/send_report"
+        tools:layout="@layout/fragment_send_problem_report" />
 </navigation>

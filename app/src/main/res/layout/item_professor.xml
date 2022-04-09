@@ -46,6 +46,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/input_register_bg"
                 android:text="@string/department"
+                android:visibility="invisible"
               />
 
             <TextView

@@ -153,7 +153,7 @@ public class ProfessorDetailsFragment extends Fragment implements SwipeRefreshLa
                                                     obj.getString("user_id"),//TODO :this should be student name
                                                     obj.getString("title"),
                                                     obj.getString("content"),
-                                                    obj.getString("answer"),
+                                                    obj.getString("answer").equals("null")?"no answer yet":obj.getString("answer"),
                                                     obj.getString("created_at")
                                             )
                                     );

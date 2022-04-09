@@ -3,15 +3,20 @@ package com.example.shaqrastudentscontact.student.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -20,17 +25,21 @@ import com.example.shaqrastudentscontact.R;
 import com.example.shaqrastudentscontact.models.Book;
 import com.example.shaqrastudentscontact.student.adapters.BooksListAdapter;
 import com.example.shaqrastudentscontact.utils.Urls;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class BooksListFragment extends Fragment {
+public class BooksListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     Context context;
     RecyclerView mList;
     BooksListAdapter mAdapter;
     ArrayList<Book> list;
     ProgressDialog pDialog;
+    SearchView searchView;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -38,7 +47,8 @@ public class BooksListFragment extends Fragment {
         this.context = context;
     }
 
-    public BooksListFragment() {}
+    public BooksListFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +58,23 @@ public class BooksListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_students_books_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_students_books_list, container, false);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.secondary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                getBooks();
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -58,10 +84,23 @@ public class BooksListFragment extends Fragment {
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Processing Please wait...");
         pDialog.setCancelable(false);
-        getBooks();
+        searchView = view.findViewById(R.id.search);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
 
-    private void getBooks(){
+    private void getBooks() {
         String url = Urls.GET_BOOKS;
         pDialog.show();
         list = new ArrayList<Book>();
@@ -82,29 +121,52 @@ public class BooksListFragment extends Fragment {
                                     list.add(
                                             new Book(
                                                     Integer.parseInt(obj.getString("id")),
-                                                    obj.getString("url"),
+                                                    Urls.BASE_URL_BOOK+obj.getString("url"),
                                                     obj.getString("title")
                                             )
                                     );
                                 }
+//                                list.add(
+//                                        new Book(
+//                                                1,
+//                                                "www",
+//                                                "neww"
+//                                        )
+//                                );
+//                                list.add(
+//                                        new Book(
+//                                                1,
+//                                                "www",
+//                                                "mm"
+//                                        )
+//                                );
                                 mAdapter = new BooksListAdapter(context, list);
                                 mList.setAdapter(mAdapter);
                             } else {
                                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                             }
+                            mSwipeRefreshLayout.setRefreshing(false);
                             pDialog.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
                             pDialog.dismiss();
+                            mSwipeRefreshLayout.setRefreshing(false);
                             Log.e("books catch", e.getMessage());
                         }
                     }
+
                     @Override
                     public void onError(ANError error) {
                         pDialog.dismiss();
+                        mSwipeRefreshLayout.setRefreshing(false);
                         Log.e("books anerror", error.getErrorBody());
                         Log.e("books anerror", error.getErrorDetail());
                     }
                 });
+    }
+
+    @Override
+    public void onRefresh() {
+        getBooks();
     }
 }

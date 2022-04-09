@@ -87,10 +87,7 @@ public class ProfessorReplyQuestionFragment extends Fragment {
 
         String url = Urls.ANSWER_PROFESSOR_QUESTION;
         String profID = String.valueOf(SharedPrefManager.getInstance(context).getUserId());
-        Log.e("id", profID);
-        Log.e("quId", questionId);
-        Log.e("ans", answer);
-        Log.e("url", url);
+
         AndroidNetworking.post(url)
                 .addBodyParameter("professor_id", profID)
                 .addBodyParameter("question_id", questionId)

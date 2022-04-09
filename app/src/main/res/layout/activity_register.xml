@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorAccent"
-    android:gravity="center"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".activities.Register">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/shaqra_logo"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="end"
+        />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -26,7 +33,7 @@
             android:padding="10dp"
             android:singleLine="true"
             android:inputType="textCapWords"
-            android:background="@color/white"
+            android:background="@drawable/bg_input"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint"
             />
@@ -40,7 +47,7 @@
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
-            android:background="@color/white"
+            android:background="@drawable/bg_input"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint" />
 
@@ -53,7 +60,7 @@
             android:inputType="textPassword"
             android:padding="10dp"
             android:singleLine="true"
-            android:background="@color/white"
+            android:background="@drawable/bg_input"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint" />
 
@@ -66,7 +73,7 @@
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
-            android:background="@color/white"
+            android:background="@drawable/bg_input"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint" />
 
@@ -107,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:text="@string/register"
-            android:background="@color/primaryTextColorDark"
+            android:background="@drawable/bg_btn"
             android:textColor="@android:color/white"/>
 
 

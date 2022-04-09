@@ -4,7 +4,7 @@ public class Urls {
 
     //MAIN REQUESTS
     public static final String BASE_URL = "http://std.scit.co/student-contract/public/api/";
-
+    public static final String BASE_URL_BOOK = "http://std.scit.co/student-contract/public";
     public static final String REGISTER_STUDENT_URL = BASE_URL + "register-student";
     public static final String REGISTER_PROFESSOR_URL = BASE_URL + "register-professor";
     public static final String LOGIN_URL = BASE_URL + "login";
@@ -12,7 +12,6 @@ public class Urls {
     public static final String RESET_PASSWORD_PROFESSOR_URL = BASE_URL + "edit_password_professor";
 
     //STUDENT
-
     public static final String GET_CHAT_LIST = "";
     public static final String GET_MESSAGES_LIST = "";
     public static final String GET_DEPARTMENTS = BASE_URL +  "get_departments";
@@ -39,4 +38,5 @@ public class Urls {
     public static final String PROFESSOR_SCHEDULE = BASE_URL + "update_professor_schedule";
 
     public static final String EMAIL_VERIFICATION = BASE_URL +  "verify_user";
+    public static final String SEND_REPORT = BASE_URL +"send_report";
 }

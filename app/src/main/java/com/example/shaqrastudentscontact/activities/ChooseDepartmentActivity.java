@@ -1,4 +1,4 @@
-package com.example.shaqrastudentscontact.student;
+package com.example.shaqrastudentscontact.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +20,9 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.shaqrastudentscontact.R;
-import com.example.shaqrastudentscontact.activities.Login;
-import com.example.shaqrastudentscontact.activities.Register;
 import com.example.shaqrastudentscontact.models.Professor;
-import com.example.shaqrastudentscontact.models.Student;
 import com.example.shaqrastudentscontact.professor.ProfessorMain;
+import com.example.shaqrastudentscontact.student.StudentMain;
 import com.example.shaqrastudentscontact.student.adapters.DepartmentsAdapter;
 import com.example.shaqrastudentscontact.models.Department;
 import com.example.shaqrastudentscontact.utils.Constants;
@@ -65,12 +63,12 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
         pDialog.setCancelable(false);
         setSupportActionBar(mToolBar);
         getAllDepartments();
-        list.add(
-            new Department(1, "technology")
-       );
-        list.add(
-                new Department(1, "Computer science" )
-        );
+//        list.add(
+//            new Department(1, "technology")
+//       );
+//        list.add(
+//                new Department(1, "Computer science" )
+//        );
         Intent i = getIntent();
 
         if (i.getIntExtra(Constants.FROM,-1) == Constants.USER_TYPE_PROFESSOR){
@@ -171,10 +169,15 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                                         userJson.getString("email")
 
                                 );
-//                                verificationCode = userJson.getString("status");
-                                //storing the user in shared preferences
                                 SharedPrefManager.getInstance(getApplicationContext()).professorLogin(professor);
-                                verifyEmail();
+                                verificationCode = userJson.getString("status");
+                                Log.e("code", verificationCode);
+
+                                //storing the user in shared preferences
+                                SharedPrefManager.getInstance(getApplicationContext()).setVerified(false);
+                                SharedPrefManager.getInstance(getApplicationContext()).setVerificationCode(verificationCode);
+
+                                verifyEmail(verificationCode);
 
                             }else {
                                 Toast.makeText(ChooseDepartmentActivity.this , message, Toast.LENGTH_SHORT).show();
@@ -216,7 +219,7 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                 });
     }
 
-    private void verifyEmail() {
+    private void verifyEmail(String verificationCode) {
         LayoutInflater factory = LayoutInflater.from(this);
         final View view = factory.inflate(R.layout.dilaog_email_verification, null);
         verificationDialog = new AlertDialog.Builder(this).create();
@@ -228,67 +231,75 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
         verify.setOnClickListener(v->{
             if(!code.getText().toString().trim().isEmpty()){
                 String codeFromUser = code.getText().toString().trim();
-                sendVerificationRequest(codeFromUser);
+                if(verificationCode.equals(codeFromUser)){
+                    Toast.makeText(this, getResources().getString(R.string.correct_code), Toast.LENGTH_SHORT).show();
+                    SharedPrefManager.getInstance(getApplicationContext()).setVerified(true);
+                    goToProfMain();
+                }else{
+                    Toast.makeText(this, getResources().getString(R.string.error_code), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         verificationDialog.show();
     }
 
-    private void sendVerificationRequest(String code) {
-
-        String url = Urls.EMAIL_VERIFICATION;
-        pDialog.show();
-        AndroidNetworking.post(url)
-                .addBodyParameter("email", profEmail)
-                .addBodyParameter("code", code)
-                .addBodyParameter("type", String.valueOf(Constants.USER_TYPE_PROFESSOR))
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject obj = response;
-                            String message = obj.getString("message");
-                            String success = "User founded";
-                            //if no error in response
-                            if (message.toLowerCase().contains(success.toLowerCase())) {
-
-                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.correct_code), Toast.LENGTH_SHORT).show();
-                                verificationDialog.dismiss();
-                                goToProfMain();
-                                Log.e("code", code);
-                            } else{
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e("regprof catch", e.getMessage());
-                            pDialog.dismiss();
-
-                        }
-                    }
-                    @Override
-                    public void onError(ANError anError) {
-                        pDialog.dismiss();
-                        Log.e("regiproferror", anError.getErrorBody());
-                        try {
-                            JSONObject error = new JSONObject(anError.getErrorBody());
-                            JSONObject data = error.getJSONObject("data");
-                            Toast.makeText(ChooseDepartmentActivity.this, error.getString("message"), Toast.LENGTH_SHORT).show();
-                            if (data.has("email")) {
-                                Toast.makeText(getApplicationContext(), data.getJSONArray("email").toString(), Toast.LENGTH_SHORT).show();
-                            }
-                            if (data.has("code")) {
-                                Toast.makeText(getApplicationContext(), data.getJSONArray("code").toString(), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
+//    private void sendVerificationRequest(String code) {
+//
+//        String url = Urls.EMAIL_VERIFICATION;
+//        pDialog.show();
+//        AndroidNetworking.post(url)
+//                .addBodyParameter("email", profEmail)
+//                .addBodyParameter("code", code)
+//                .addBodyParameter("type", String.valueOf(Constants.USER_TYPE_PROFESSOR))
+//                .setPriority(Priority.MEDIUM)
+//                .build()
+//                .getAsJSONObject(new JSONObjectRequestListener() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        try {
+//                            JSONObject obj = response;
+//                            String message = obj.getString("message");
+//                            String success = "User founded";
+//                            //if no error in response
+//                            if (message.toLowerCase().contains(success.toLowerCase())) {
+//
+//                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.correct_code), Toast.LENGTH_SHORT).show();
+//                                verificationDialog.dismiss();
+//                                goToProfMain();
+//                                Log.e("code", code);
+//                            } else{
+//                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                            }
+//                            pDialog.dismiss();
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            Log.e("regprof catch", e.getMessage());
+//                            pDialog.dismiss();
+//
+//                        }
+//                    }
+//                    @Override
+//                    public void onError(ANError anError) {
+//                        pDialog.dismiss();
+//                        Log.e("regiproferror", anError.getErrorBody());
+//                        try {
+//                            JSONObject error = new JSONObject(anError.getErrorBody());
+//                            JSONObject data = error.getJSONObject("data");
+//                            Toast.makeText(ChooseDepartmentActivity.this, error.getString("message"), Toast.LENGTH_SHORT).show();
+//                            if (data.has("email")) {
+//                                Toast.makeText(getApplicationContext(), data.getJSONArray("email").toString(), Toast.LENGTH_SHORT).show();
+//                            }
+//                            if (data.has("code")) {
+//                                Toast.makeText(getApplicationContext(), data.getJSONArray("code").toString(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//    }
 
     private void goToProfMain() {
         startActivity(new Intent(ChooseDepartmentActivity.this, ProfessorMain.class));

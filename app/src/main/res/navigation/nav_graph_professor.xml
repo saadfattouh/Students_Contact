@@ -47,5 +47,9 @@
         android:label="@string/set_free_time_schedule"
         tools:layout="@layout/fragment_professor_schedule_free_time" />
 
-
+    <fragment
+        android:id="@+id/menu_report"
+        android:name="com.example.shaqrastudentscontact.student.SendProblemReportFragment"
+        android:label="@string/send_report"
+        tools:layout="@layout/fragment_send_problem_report" />
 </navigation>
