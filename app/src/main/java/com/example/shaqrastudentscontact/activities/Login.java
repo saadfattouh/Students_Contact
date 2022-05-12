@@ -89,7 +89,7 @@ public class Login extends AppCompatActivity {
                     return;
                 }else {
                     if(selectedUserType == Constants.USER_TYPE_PROFESSOR){
-                        if(email.contains(getResources().getString(R.string.professor_email_suffex))){
+                        if(!email.contains(getResources().getString(R.string.professor_email_suffex))){
                                 Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_professor_email), Toast.LENGTH_SHORT).show();
                                 mLoginBtn.setEnabled(true);
                                 return ;
@@ -97,7 +97,7 @@ public class Login extends AppCompatActivity {
                             loginUser(email, password);
                         }
                     }else if(selectedUserType == Constants.USER_TYPE_STUDENT){
-                        if(email.matches("^[\\w]+[\\w.%+-]*@std\\.su\\.edu\\.sa$")){
+                        if(!email.matches("^[\\w]+[\\w.%+-]*@std\\.su\\.edu\\.sa$")){
                             Toast.makeText(Login.this, getResources().getString(R.string.please_provide_a_valid_student_email), Toast.LENGTH_SHORT).show();
                             mLoginBtn.setEnabled(true);
                             return;
