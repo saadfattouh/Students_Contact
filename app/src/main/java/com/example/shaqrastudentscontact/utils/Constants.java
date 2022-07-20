@@ -8,6 +8,7 @@ public class Constants {
 
     public static final int STUDENT_TYPE_NORMAL = 0;
     public static final int STUDENT_TYPE_HONOR = 1;
+
     public static final String STUDENT_NORMAL_TXT = "student";
     public static final String STUDENT_HONOR_TXT = "Honor student";
 

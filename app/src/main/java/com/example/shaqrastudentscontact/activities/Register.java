@@ -223,6 +223,9 @@ public class Register extends AppCompatActivity {
                                 SharedPrefManager.getInstance(getApplicationContext()).studentLogin(student);
 
                                 verificationCode = userJson.getString("status");
+//                                String email = mEmailET.getText().toString().trim();
+//                                sendCode(verificationCode, email);
+
                                 Log.e("code", verificationCode);
                                 SharedPrefManager.getInstance(getApplicationContext()).setVerified(false);
                                 SharedPrefManager.getInstance(getApplicationContext()).setVerificationCode(verificationCode);
@@ -273,64 +276,42 @@ public class Register extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+        private void sendCode(String code, String email) {
+        String url = Urls.EMAIL_VERIFICATION_SERVICE;
+
+        Log.e("email", email);
+        Log.e("code", code);
+        pDialog.show();
+        AndroidNetworking.post(url)
+                .addBodyParameter("email", email)
+                .addBodyParameter("code", code)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject obj = response;
+                            String message = obj.getString("error");
+                            if (message.equalsIgnoreCase("false")) {
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.email_sent), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.some_error), Toast.LENGTH_SHORT).show();
+                            }
+                            pDialog.dismiss();
+                        } catch (JSONException e) {
+                            pDialog.dismiss();
+                            e.printStackTrace();
+                            Log.e("codest catch", e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pDialog.dismiss();
+                        Log.e("codestror", anError.getErrorDetail());
+                    }
+                });
+    }
 }
-//    private void sendVerificationRequest(String code) {
-//        String url = Urls.EMAIL_VERIFICATION;
-//        String email = mEmailET.getText().toString().trim();
-//
-//        Log.e("email", email);
-//        Log.e("code", code);
-//        Log.e("type", String.valueOf(selectedUserType));
-//        pDialog.show();
-//        AndroidNetworking.post(url)
-//                .addBodyParameter("email", email)
-//                .addBodyParameter("code", code)
-//                .addBodyParameter("type", String.valueOf(selectedUserType))
-//                .setPriority(Priority.MEDIUM)
-//                .build()
-//                .getAsJSONObject(new JSONObjectRequestListener() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            JSONObject obj = response;
-//                            String message = obj.getString("message");
-//                            String success = "User founded";
-//                            //if no error in response
-//                            if (message.toLowerCase().contains(success.toLowerCase())) {
-//
-//                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.correct_code), Toast.LENGTH_SHORT).show();
-//                                verificationDialog.dismiss();
-//                                goToDepts();
-//                                Log.e("code", code);
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-//                            }
-//                            pDialog.dismiss();
-//                            mRegisterBtn.setEnabled(true);
-//                        } catch (JSONException e) {
-//                            pDialog.dismiss();
-//                            e.printStackTrace();
-//                            Log.e("codest catch", e.getMessage());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(ANError anError) {
-//                        pDialog.dismiss();
-//                        Log.e("codestror", anError.getErrorBody());
-//                        try {
-//                            JSONObject error = new JSONObject(anError.getErrorBody());
-//                            JSONObject data = error.getJSONObject("data");
-//                            Toast.makeText(Register.this, error.getString("message"), Toast.LENGTH_SHORT).show();
-//                            if (data.has("email")) {
-//                                Toast.makeText(getApplicationContext(), data.getJSONArray("email").toString(), Toast.LENGTH_SHORT).show();
-//                            }
-//                            if (data.has("code")) {
-//                                Toast.makeText(getApplicationContext(), data.getJSONArray("code").toString(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//    }
+

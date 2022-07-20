@@ -143,6 +143,7 @@
     <string name="report_title">Report title</string>
     <string name="report_content">Report content</string>
     <string name="send_report">Send report</string>
+    <string name="email_sent">Verification code sent</string>
 
 
 </resources>

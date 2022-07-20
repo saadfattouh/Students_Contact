@@ -60,7 +60,7 @@ public class ProfessorMain extends AppCompatActivity implements DrawerLayout.Dra
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.menu_requested_questions, R.id.menu_update_schedule, R.id.menu_prof_profile).setOpenableLayout(drawerLayout).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.menu_requested_questions, R.id.menu_update_schedule, R.id.menu_prof_profile,R.id.menu_report).setOpenableLayout(drawerLayout).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
@@ -107,6 +107,9 @@ public class ProfessorMain extends AppCompatActivity implements DrawerLayout.Dra
 
             case R.id.menu_prof_profile:
                 destination = R.id.menu_prof_profile;
+                break;
+            case R.id.menu_report:
+                destination = R.id.menu_report;
                 break;
 
             case R.id.menu_logout:

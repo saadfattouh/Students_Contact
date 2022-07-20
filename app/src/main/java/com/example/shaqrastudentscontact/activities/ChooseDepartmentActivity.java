@@ -172,7 +172,7 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                                 SharedPrefManager.getInstance(getApplicationContext()).professorLogin(professor);
                                 verificationCode = userJson.getString("status");
                                 Log.e("code", verificationCode);
-
+                                sendCode(verificationCode, profEmail);
                                 //storing the user in shared preferences
                                 SharedPrefManager.getInstance(getApplicationContext()).setVerified(false);
                                 SharedPrefManager.getInstance(getApplicationContext()).setVerificationCode(verificationCode);
@@ -215,6 +215,43 @@ public class ChooseDepartmentActivity extends AppCompatActivity implements Depar
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                    }
+                });
+    }
+    private void sendCode(String code, String email) {
+        String url = Urls.EMAIL_VERIFICATION_SERVICE;
+
+        Log.e("email", email);
+        Log.e("code", code);
+        pDialog.show();
+        AndroidNetworking.post(url)
+                .addBodyParameter("email", email)
+                .addBodyParameter("code", code)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject obj = response;
+                            String message = obj.getString("error");
+                            if (message.equalsIgnoreCase("false")) {
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.email_sent), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.some_error), Toast.LENGTH_SHORT).show();
+                            }
+                            pDialog.dismiss();
+                        } catch (JSONException e) {
+                            pDialog.dismiss();
+                            e.printStackTrace();
+                            Log.e("codest catch", e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        pDialog.dismiss();
+                        Log.e("codestror", anError.getErrorDetail());
                     }
                 });
     }

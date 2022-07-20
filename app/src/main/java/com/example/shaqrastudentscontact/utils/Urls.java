@@ -3,8 +3,15 @@ package com.example.shaqrastudentscontact.utils;
 public class Urls {
 
     //MAIN REQUESTS
-    public static final String BASE_URL = "http://std.scit.co/student-contract/public/api/";
-    public static final String BASE_URL_BOOK = "http://std.scit.co/student-contract/public";
+
+    //ONLINE
+//    public static final String BASE_URL = "http://std.scit.co/student-contract/public/api/";
+//    public static final String BASE_URL_BOOK = "http://std.scit.co/student-contract/public";
+
+    //OFFLINE
+    public static final String BASE_URL = "http://192.168.43.130/std-student-contract/public/api/";
+    public static final String BASE_URL_BOOK = "http://192.168.43.130/std-student-contract/public";
+
     public static final String REGISTER_STUDENT_URL = BASE_URL + "register-student";
     public static final String REGISTER_PROFESSOR_URL = BASE_URL + "register-professor";
     public static final String LOGIN_URL = BASE_URL + "login";
@@ -37,6 +44,8 @@ public class Urls {
     //PROFESSOR
     public static final String PROFESSOR_SCHEDULE = BASE_URL + "update_professor_schedule";
 
-    public static final String EMAIL_VERIFICATION = BASE_URL +  "verify_user";
     public static final String SEND_REPORT = BASE_URL +"send_report";
+
+    public static final String EMAIL_VERIFICATION_SERVICE = "https://evcmailsupport.000webhostapp.com/sendMail.php";
+
 }

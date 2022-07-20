@@ -165,5 +165,4 @@ public class SharedPrefManager {
         editor.clear().commit();
     }
 
-
 }

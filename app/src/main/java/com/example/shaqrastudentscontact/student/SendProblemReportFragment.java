@@ -58,9 +58,10 @@ public class SendProblemReportFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mContent = view.findViewById(R.id.report_title);
+        mTitleET = view.findViewById(R.id.report_title);
         mContent = view.findViewById(R.id.report_content);
         mSendReportBtn = view.findViewById(R.id.send_btn);
+
 
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Processing Please wait...");
@@ -81,7 +82,7 @@ public class SendProblemReportFragment extends Fragment {
         String content = mContent.getText().toString().trim();
         Log.e("user_id", userId);
         Log.e("title", title);
-        Log.e("title", content);
+        Log.e("content", content);
         mSendReportBtn.setEnabled(false);
         pDialog.show();
         AndroidNetworking.post(url)
@@ -97,7 +98,7 @@ public class SendProblemReportFragment extends Fragment {
                             //converting response to json object
                             JSONObject obj = response;
                             String message = obj.getString("message");
-                            String userFounded = "founded";
+                            String userFounded = "Report Saved";
                             //if no error in response
                             if (message.toLowerCase().contains(userFounded.toLowerCase())) {
                                 Toast.makeText(context, context.getResources().getString(R.string.send_report_successfully), Toast.LENGTH_SHORT).show();
